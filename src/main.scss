@@ -1,0 +1,28 @@
+@import '@fontsource/roboto';
+
+body {
+  background-color: #0f1214;
+  color: white;
+  font-family: "Roboto";
+}
+
+@font-face {
+  font-family: "Creepshow";
+  src: url("@/assets/fonts/Creepshow.otf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Brush-King";
+  src: url("@/assets/fonts/Brush\ King.otf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Creepshow-Grunge";
+  src: url("@/assets/fonts/CreepshowGrunge.otf");
+  font-weight: normal;
+  font-style: normal;
+}
