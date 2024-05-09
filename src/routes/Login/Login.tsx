@@ -10,6 +10,7 @@ export default function Login() {
   const navigate = useNavigate();
 
   const onLoginPress = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
     console.log(email, password);
   };
 
