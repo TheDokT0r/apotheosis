@@ -3,6 +3,10 @@ import "./Login.scss";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { toast } from "react-toastify";
+import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import { firebaseApp } from "@/helper/firebase";
+import initUser from "@/helper/initUser";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
@@ -11,9 +15,28 @@ export default function Signup() {
   const [username, setUsername] = useState("");
   const navigate = useNavigate();
 
-  const onSignupPress = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const onSignupPress = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     e.preventDefault();
-    console.log(email, password);
+    if (!email || !username || !password || !confirmPassword) {
+      toast.error("Please fill up all data!");
+      return;
+    }
+
+    if (password !== password) {
+      toast.warning("Make sure your passwords much");
+      return;
+    }
+
+    const auth = getAuth(firebaseApp);
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(async () => {
+        await initUser(username);
+        toast.success(`Welcome, ${username}!`);
+        navigate('/');
+      })
+      .catch((error) => toast.error(error.message));
   };
 
   return (

@@ -19,11 +19,11 @@ export default function Login() {
     const auth = getAuth(firebaseApp);
     signInWithEmailAndPassword(auth, email, password)
       .then(({ user }) => {
-        toast(`Welcome back ${user.displayName}`);
+        toast.success(`Welcome back ${user.displayName}`);
         navigate('/');
       })
       .catch((error) => {
-        toast(error.message);
+        toast.error(error.message);
         return;
       });
   };
