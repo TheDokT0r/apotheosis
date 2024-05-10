@@ -41,7 +41,7 @@ export default function Signup() {
 
   return (
     <FormControl variant="outlined" className="login-form">
-      <h1>Create Account</h1>
+      <h1>Start Your Adventure Today!</h1>
 
       <TextField
         sx={{ margin: "1rem" }}

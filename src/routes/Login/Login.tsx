@@ -30,7 +30,7 @@ export default function Login() {
 
   return (
     <FormControl variant="outlined" className="login-form">
-      <h1>Login to start your adventure!</h1>
+      <h1>Login To Start Your Adventure!</h1>
       <TextField
         sx={{ margin: "2rem" }}
         type="email"
