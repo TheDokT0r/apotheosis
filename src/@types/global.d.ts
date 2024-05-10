@@ -29,9 +29,15 @@ declare global {
         position: { x: number; y: number };
         description: string;
       }[];
-      
+
       notes: string;
     };
+  }
+
+  interface CharacterMetaData {
+    creationDate: Date;
+    lastUpdate: Date;
+    isGM: boolean;
   }
 }
 

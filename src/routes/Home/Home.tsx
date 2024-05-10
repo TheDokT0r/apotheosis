@@ -11,13 +11,12 @@ export default function Home() {
   useEffect(() => {
     setLoading(true);
     const auth = getAuth(firebaseApp);
-
     if (!auth.currentUser) {
         navigate('/login');
     }
 
     setLoading(false);
-  }, []);
+  }, [navigate]);
 
   if(loading) return <LoadingPage />
 

@@ -94,4 +94,11 @@ export default async function initUser(username: string) {
       merge: true,
     });
   }
+  const metaData: CharacterMetaData = {
+    creationDate: new Date(),
+    lastUpdate: new Date(),
+    isGM: false,
+  };
+
+  await setDoc(doc(db, "meta", user.uid), metaData, { merge: true });
 }

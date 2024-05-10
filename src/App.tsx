@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LoadingPage from "./components/LoadingPage/LoadingPage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/ReactToastify.min.css";
+import Menu from "./components/LoadingPage/SideMenu/SideMenu";
 
 const Home = lazy(() => import("@/routes/Home/Home"));
 const Login = lazy(() => import("@/routes/Login/Login"));
@@ -21,6 +22,7 @@ export default function App() {
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
         <BrowserRouter>
+          <Menu />
           <Suspense fallback={<LoadingPage />}>
             <Routes>
               <Route path="/" element={<Home />} />
