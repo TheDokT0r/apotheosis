@@ -3,15 +3,29 @@ import "./Login.scss";
 import { useState } from "react";
 import LoginIcon from "@mui/icons-material/Login";
 import { useNavigate } from "react-router-dom";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { firebaseApp } from "@/helper/firebase";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const onLoginPress = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const onLoginPress = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     e.preventDefault();
-    console.log(email, password);
+    const auth = getAuth(firebaseApp);
+    signInWithEmailAndPassword(auth, email, password)
+      .then(({ user }) => {
+        toast(`Welcome back ${user.displayName}`);
+        navigate('/');
+      })
+      .catch((error) => {
+        toast(error.message);
+        return;
+      });
   };
 
   return (
