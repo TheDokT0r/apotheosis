@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
 
   authDomain: "ttrpg-12502.firebaseapp.com",

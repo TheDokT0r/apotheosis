@@ -4,11 +4,10 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LoadingPage from "./components/LoadingPage/LoadingPage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/ReactToastify.min.css";
-import Menu from "./components/LoadingPage/SideMenu/SideMenu";
-
 const Home = lazy(() => import("@/routes/Home/Home"));
 const Login = lazy(() => import("@/routes/Login/Login"));
 const Signup = lazy(() => import("@/routes/Login/Signup"));
+const Menu = lazy(() => import("@/components/SideMenu/SideMenu"));
 
 const darkTheme = createTheme({
   palette: {

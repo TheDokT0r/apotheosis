@@ -53,11 +53,20 @@ export default function SideMenu() {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClick={handleClose}>
+        <MenuItem
+          onClick={() => {
+            navigate("/");
+            handleClose();
+          }}
+        >
           <AccountCircleIcon /> Profile
         </MenuItem>
         <MenuItem onClick={logoutHandler}>
           <LogoutIcon /> Logout
+        </MenuItem>
+        <br />
+        <MenuItem>
+          <span>Build 2.0 - Caesar</span>
         </MenuItem>
       </Menu>
     </div>
