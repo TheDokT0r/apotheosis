@@ -6,6 +6,7 @@ import LoadingPage from "@/components/LoadingPage/LoadingPage";
 import { TextField } from "@mui/material";
 import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 import "./Home.scss";
+import Attributes from "./Attributes";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -86,6 +87,8 @@ export default function Home() {
           onChange={(e) => changeBasicInfoValue("species", e.target.value)}
         />
       </div>
+
+      <Attributes />
     </div>
   );
 }

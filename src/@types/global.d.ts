@@ -12,7 +12,7 @@ declare global {
   interface CharacterSheet {
     basic_info: { [key: string]: string };
 
-    attributes: { [attribute: string]: number | null };
+    attributes: { [attribute: string]: number | string | null };
 
     skills: {
       [category: string]: {
