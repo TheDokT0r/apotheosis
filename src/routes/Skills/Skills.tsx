@@ -8,13 +8,14 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Checkbox,
+  Rating,
 } from "@mui/material";
 import { getAuth } from "firebase/auth";
-import { doc, getDoc, getFirestore } from "firebase/firestore";
+import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Skills.scss";
-import { CheckBox } from "@mui/icons-material";
 
 export default function Skills() {
   const [skills, setSkills] = useState<CharacterSheet["skills"]>({});
@@ -38,17 +39,55 @@ export default function Skills() {
 
       setSkills(docSnap.data());
     });
-  }, []);
+  }, [auth, db, navigate]);
+
+  const onProChange = async (
+    table: string,
+    skillKey: string,
+    newState: boolean
+  ) => {
+    const user = getAuth().currentUser;
+    if (!user) return;
+
+    const skillsCopy = { ...skills };
+    skillsCopy[table][skillKey].pro = newState;
+    setSkills(skillsCopy);
+
+    await setDoc(
+      doc(db, "sheets", user.uid, "character", "skills"),
+      skillsCopy
+    );
+  };
+
+  const onSkillChange = async (
+    table: string,
+    skillKey: string,
+    newState: number
+  ) => {
+    const user = getAuth().currentUser;
+    if (!user) return;
+
+    const skillsCopy = { ...skills };
+    skillsCopy[table][skillKey].skill_level = newState;
+    setSkills(skillsCopy);
+
+    await setDoc(
+      doc(db, "sheets", user.uid, "character", "skills"),
+      skillsCopy
+    );
+  };
 
   return (
     <Card variant="outlined">
       {Object.keys(skills)
         .sort()
-        .map((key) => (
+        .map((tableKey) => (
           <div>
-            <h2 style={{ textTransform: "capitalize" }}></h2>
+            <h2 style={{ textTransform: "capitalize", textAlign: "center" }}>
+              {tableKey}
+            </h2>
             <TableContainer component={Paper}>
-              <Table>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                   <TableCell sx={{ fontFamily: "Creepshow" }}>
                     Skill Name
@@ -60,23 +99,43 @@ export default function Skills() {
                 </TableHead>
 
                 <TableBody>
-                  {Object.keys(skills[key])
+                  {Object.keys(skills[tableKey])
                     .sort()
                     .map((skillKey) => (
-                      <>
-                        <TableRow
-                          sx={{ textTransform: "capitalize" }}
-                          key={skillKey}
-                        />
-
-                        <TableCell component="th" scope="row">
+                      <TableRow
+                        sx={{ textTransform: "capitalize" }}
+                        key={skillKey}
+                      >
+                        <TableCell
+                          sx={{ fontSize: "1.5rem", fontFamily: "Creepshow" }}
+                          component="th"
+                          scope="row"
+                        >
                           {skillKey}
                         </TableCell>
 
-                        <TableCell align="right">
-                          <CheckBox />
+                        <TableCell>
+                          <Checkbox
+                            checked={skills[tableKey][skillKey].pro}
+                            onChange={() =>
+                              onProChange(
+                                tableKey,
+                                skillKey,
+                                !skills[tableKey][skillKey].pro
+                              )
+                            }
+                          />
                         </TableCell>
-                      </>
+
+                        <TableCell>
+                          <Rating
+                            value={skills[tableKey][skillKey].skill_level}
+                            onChange={(_, value) =>
+                              onSkillChange(tableKey, skillKey, value ?? 0)
+                            }
+                          />
+                        </TableCell>
+                      </TableRow>
                     ))}
                 </TableBody>
               </Table>
