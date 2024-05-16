@@ -19,7 +19,7 @@ export default function Login() {
     e.preventDefault();
     const auth = getAuth(firebaseApp);
     signInWithEmailAndPassword(auth, email, password)
-      .then(async ({ user }) => {
+      .then(async () => {
         // const db = getFirestore(firebaseApp);
         // const basicInfo = await getDoc(doc(db, 'sheets', user.uid, 'character', 'basic_info')); 
         // if(!basicInfo.exists()) {
