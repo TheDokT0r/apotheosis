@@ -23,7 +23,7 @@ export default function Attributes() {
 
     const user = auth.currentUser;
     if (!user) return;
-    setDoc(doc(db, "sheets", user.uid, "character", "attributes"), attributes);
+    setDoc(doc(db, "sheets", user.uid, "character", "attributes"), attributesCopy);
   };
 
   const auth = getAuth(firebaseApp);

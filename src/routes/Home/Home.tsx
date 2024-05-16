@@ -37,9 +37,10 @@ export default function Home() {
 
     setBasicInfo(basicInfoCopy);
 
+    console.log({value});
     const user = auth.currentUser;
     if (!user) return;
-    setDoc(doc(db, "sheets", user.uid, "character", "basic_info"), basicInfo);
+    setDoc(doc(db, "sheets", user.uid, "character", "basic_info"), basicInfoCopy);
   };
 
   useEffect(() => {

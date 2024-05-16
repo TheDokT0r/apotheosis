@@ -25,7 +25,7 @@ export default function Status() {
 
     const user = auth.currentUser;
     if (!user) return;
-    setDoc(doc(db, "sheets", user.uid, "character", "status"), status);
+    setDoc(doc(db, "sheets", user.uid, "character", "status"), statusCopy);
   };
 
   const auth = getAuth(firebaseApp);

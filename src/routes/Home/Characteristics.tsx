@@ -6,9 +6,9 @@ import { firebaseApp } from "@/helper/firebase";
 import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 
 export default function Characteristics() {
-  const [characteristics, setCharacteristics] = useState<CharacterSheet["characteristics"]>(
-    {}
-  );
+  const [characteristics, setCharacteristics] = useState<
+    CharacterSheet["characteristics"]
+  >({});
 
   const changeCharValues = (key: string, value: string) => {
     const charsCopy = { ...characteristics };
@@ -25,7 +25,7 @@ export default function Characteristics() {
     if (!user) return;
     setDoc(
       doc(db, "sheets", user.uid, "character", "characteristics"),
-      characteristics
+      charsCopy
     );
   };
 

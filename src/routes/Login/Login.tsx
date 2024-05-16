@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { firebaseApp } from "@/helper/firebase";
 import { toast } from "react-toastify";
+// import { doc, getDoc, getFirestore } from "firebase/firestore";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -18,8 +19,12 @@ export default function Login() {
     e.preventDefault();
     const auth = getAuth(firebaseApp);
     signInWithEmailAndPassword(auth, email, password)
-      .then(({ user }) => {
-        toast.success(`Welcome back ${user.displayName}`);
+      .then(async ({ user }) => {
+        // const db = getFirestore(firebaseApp);
+        // const basicInfo = await getDoc(doc(db, 'sheets', user.uid, 'character', 'basic_info')); 
+        // if(!basicInfo.exists()) {
+        //   toast.success(`Welcome back ${basicInfo.data()!.player_name}`);
+        // }
         navigate('/');
       })
       .catch((error) => {
