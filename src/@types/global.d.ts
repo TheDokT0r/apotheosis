@@ -13,6 +13,7 @@ declare global {
     basic_info: { [key: string]: string };
 
     attributes: { [attribute: string]: number | string | null };
+    characteristics: { [characteristic: string]: number | string | null };
 
     skills: {
       [category: string]: {
@@ -21,7 +22,10 @@ declare global {
     };
 
     status: {
-      [key: string]: { total: number | null; current: number | null };
+      [key: string]: {
+        total: number | string | null;
+        current: number | string | null;
+      };
     };
 
     extras: {

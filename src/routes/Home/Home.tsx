@@ -3,10 +3,26 @@ import { getAuth } from "firebase/auth";
 import { firebaseApp } from "@/helper/firebase";
 import { useNavigate } from "react-router-dom";
 import LoadingPage from "@/components/LoadingPage/LoadingPage";
-import { Divider, TextField } from "@mui/material";
+import { Autocomplete, Divider, TextField } from "@mui/material";
 import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 import "./Home.scss";
 import Attributes from "./Attributes";
+import Characteristics from "./Characteristics";
+import Status from "./Status";
+
+const archetypes = [
+  "Fleshless",
+  "Inventor",
+  "Sharpshooter",
+  "Alchemist",
+  "Scavenger",
+  "Brute",
+  "Animator",
+  "Infuser",
+  "Evoker",
+  "Predator",
+  "",
+];
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -70,14 +86,19 @@ export default function Home() {
           />
         </div>
 
-        <div>
-          <TextField
-            label="Archetype"
-            key="archetype"
+        <div style={{ display: "flex" }}>
+          <Autocomplete
+            sx={{ width: "13rem" }}
+            options={archetypes}
             value={basicInfo.archetype}
-            onChange={(e) => changeBasicInfoValue("archetype", e.target.value)}
+            // onSelect={(e) => changeBasicInfoValue("archetype",)}
+            onChange={(_, newValue) =>
+              changeBasicInfoValue("archetype", newValue ?? "")
+            }
+            renderInput={(params) => (
+              <TextField {...params} label="Archetype" />
+            )}
           />
-
           <TextField
             label="Affiliation"
             key="affiliation"
@@ -96,6 +117,10 @@ export default function Home() {
       </div>
 
       <Attributes />
+
+      <Characteristics />
+
+      <Status />
     </div>
   );
 }

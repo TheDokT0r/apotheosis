@@ -32,9 +32,12 @@ export default async function initUser(username: string) {
       intuition: null,
       agility: null,
       psyche: null,
+    },
+
+    characteristics: {
       speed: null,
-      dodge: null,
       defense: null,
+      dodge: null,
     },
 
     skills: {
