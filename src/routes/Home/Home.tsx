@@ -3,7 +3,7 @@ import { getAuth } from "firebase/auth";
 import { firebaseApp } from "@/helper/firebase";
 import { useNavigate } from "react-router-dom";
 import LoadingPage from "@/components/LoadingPage/LoadingPage";
-import { TextField } from "@mui/material";
+import { Divider, TextField } from "@mui/material";
 import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 import "./Home.scss";
 import Attributes from "./Attributes";
@@ -46,46 +46,53 @@ export default function Home() {
   if (loading || !basicInfo) return <LoadingPage />;
 
   return (
-    <div className="basic-info-container">
-      <div>
-        <TextField
-          label="Player Name"
-          key="player_name"
-          value={basicInfo.player_name}
-          onChange={(e) => changeBasicInfoValue("player_name", e.target.value)}
-        />
+    <div className="home-container">
+      <h3>Basic Info</h3>
+      <Divider sx={{ width: "80%" }} />
+      <div className="basic-info-container">
+        <div>
+          <TextField
+            label="Player Name"
+            key="player_name"
+            value={basicInfo.player_name}
+            onChange={(e) =>
+              changeBasicInfoValue("player_name", e.target.value)
+            }
+          />
 
-        <TextField
-          label="Character Name"
-          key="character_name"
-          value={basicInfo.character_name}
-          onChange={(e) =>
-            changeBasicInfoValue("character_name", e.target.value)
-          }
-        />
-      </div>
+          <TextField
+            label="Character Name"
+            key="character_name"
+            value={basicInfo.character_name}
+            onChange={(e) =>
+              changeBasicInfoValue("character_name", e.target.value)
+            }
+          />
+        </div>
 
-      <div>
-        <TextField
-          label="Archetype"
-          key="archetype"
-          value={basicInfo.archetype}
-          onChange={(e) => changeBasicInfoValue("archetype", e.target.value)}
-        />
+        <div>
+          <TextField
+            label="Archetype"
+            key="archetype"
+            value={basicInfo.archetype}
+            onChange={(e) => changeBasicInfoValue("archetype", e.target.value)}
+          />
 
-        <TextField
-          label="Affiliation"
-          key="affiliation"
-          value={basicInfo.affiliation}
-          onChange={(e) => changeBasicInfoValue("affiliation", e.target.value)}
-        />
-
-        <TextField
-          label="Species"
-          key="species"
-          value={basicInfo.species}
-          onChange={(e) => changeBasicInfoValue("species", e.target.value)}
-        />
+          <TextField
+            label="Affiliation"
+            key="affiliation"
+            value={basicInfo.affiliation}
+            onChange={(e) =>
+              changeBasicInfoValue("affiliation", e.target.value)
+            }
+          />
+          <TextField
+            label="Species"
+            key="species"
+            value={basicInfo.species}
+            onChange={(e) => changeBasicInfoValue("species", e.target.value)}
+          />
+        </div>
       </div>
 
       <Attributes />

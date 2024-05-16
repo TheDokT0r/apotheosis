@@ -1,4 +1,4 @@
-import { TextField } from "@mui/material";
+import { Divider, TextField } from "@mui/material";
 import "./Home.scss";
 import { useEffect, useState } from "react";
 import { getAuth } from "firebase/auth";
@@ -47,6 +47,7 @@ export default function Attributes() {
   return (
     <div className="stats-container">
       <h3>Attributes</h3>
+      <Divider sx={{ width: "80%" }} />
       <div className="stats">
         {Object.keys(attributes)
           .sort()

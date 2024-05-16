@@ -7,6 +7,7 @@ import "react-toastify/ReactToastify.min.css";
 const Home = lazy(() => import("@/routes/Home/Home"));
 const Login = lazy(() => import("@/routes/Login/Login"));
 const Signup = lazy(() => import("@/routes/Login/Signup"));
+const Skills = lazy(() => import("@/routes/Skills/Skills"));
 const Menu = lazy(() => import("@/components/SideMenu/SideMenu"));
 
 const darkTheme = createTheme({
@@ -27,6 +28,7 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/skills" element={<Skills />} />
             </Routes>
           </Suspense>
         </BrowserRouter>

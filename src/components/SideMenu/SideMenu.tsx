@@ -4,10 +4,12 @@ import MenuItem from "@mui/material/MenuItem";
 import MenuIcon from "@mui/icons-material/Menu";
 import IconButton from "@mui/material/IconButton";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { getAuth } from "firebase/auth";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { Divider } from "@mui/material";
 
 export default function SideMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -59,12 +61,22 @@ export default function SideMenu() {
             handleClose();
           }}
         >
-          <AccountCircleIcon /> Profile
+          <AccountCircleIcon /> Basic Profile
         </MenuItem>
+
+        <MenuItem
+          onClick={() => {
+            navigate("/skills");
+            handleClose();
+          }}
+        >
+          <AutoFixHighIcon />
+          Skills
+        </MenuItem>
+        <Divider />
         <MenuItem onClick={logoutHandler}>
           <LogoutIcon /> Logout
         </MenuItem>
-        <br />
         <MenuItem>
           <span>Build 2.0 - Caesar</span>
         </MenuItem>
