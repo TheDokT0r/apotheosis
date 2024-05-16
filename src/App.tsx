@@ -9,6 +9,7 @@ const Login = lazy(() => import("@/routes/Login/Login"));
 const Signup = lazy(() => import("@/routes/Login/Signup"));
 const Skills = lazy(() => import("@/routes/Skills/Skills"));
 const Notes = lazy(() => import("@/routes/Notes/Notes"));
+const Temps = lazy(() => import("@/routes/Temps/Temps"));
 const Menu = lazy(() => import("@/components/SideMenu/SideMenu"));
 
 const darkTheme = createTheme({
@@ -31,6 +32,7 @@ export default function App() {
               <Route path="/signup" element={<Signup />} />
               <Route path="/skills" element={<Skills />} />
               <Route path="/notes" element={<Notes />} />
+              <Route path="/temps" element={<Temps />} />
             </Routes>
           </Suspense>
         </BrowserRouter>

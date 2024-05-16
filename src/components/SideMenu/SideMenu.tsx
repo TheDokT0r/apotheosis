@@ -84,6 +84,15 @@ export default function SideMenu() {
           <NoteAltIcon />
           Notes
         </MenuItem>
+
+        <MenuItem
+          onClick={() => {
+            navigate("/temps");
+            handleClose();
+          }}
+        >
+          Temps
+        </MenuItem>
         <Divider />
         <MenuItem onClick={logoutHandler}>
           <LogoutIcon /> Logout
