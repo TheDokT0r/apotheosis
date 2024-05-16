@@ -6,6 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import LogoutIcon from "@mui/icons-material/Logout";
+import NoteAltIcon from "@mui/icons-material/NoteAlt";
 import { getAuth } from "firebase/auth";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -72,6 +73,16 @@ export default function SideMenu() {
         >
           <AutoFixHighIcon />
           Skills
+        </MenuItem>
+
+        <MenuItem
+          onClick={() => {
+            navigate("/notes");
+            handleClose();
+          }}
+        >
+          <NoteAltIcon />
+          Notes
         </MenuItem>
         <Divider />
         <MenuItem onClick={logoutHandler}>
