@@ -1,0 +1,37 @@
+.wounds-page {
+    display: flex;
+    flex-direction: row;
+
+    .body-map {
+        position: relative;
+        overflow: hidden; /* Ensure the image does not overflow its container */
+
+        img {
+            border: 2px solid white;
+            border-radius: 5%;
+            height: 80vh;
+            width: auto; /* Allow the image to adjust its width */
+        }
+    }
+
+    .wounds-side-elements {}
+}
+
+.x-symbol {
+    position: absolute;
+    font-family: Brush-King;
+    color: red;
+    user-select: none;
+    text-align: center;
+    transition: ease 0.2s;
+    font-size: 4vh;
+    text-transform: uppercase;
+
+    &:hover {
+        color: lighten(red, 20);
+    }
+
+    &:active {
+        color: darken(red, 20);
+    }
+}

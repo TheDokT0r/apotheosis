@@ -8,6 +8,7 @@ const Home = lazy(() => import("@/routes/Home/Home"));
 const Login = lazy(() => import("@/routes/Login/Login"));
 const Signup = lazy(() => import("@/routes/Login/Signup"));
 const Skills = lazy(() => import("@/routes/Skills/Skills"));
+const Wounds = lazy(() => import("@/routes/Wounds/Wounds"));
 const Notes = lazy(() => import("@/routes/Notes/Notes"));
 const Temps = lazy(() => import("@/routes/Temps/Temps"));
 const TopMenu = lazy(() => import("@/components/TopMenu/TopMenu"));
@@ -31,6 +32,7 @@ export default function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/skills" element={<Skills />} />
+              <Route path="/wounds" element={<Wounds />} />
               <Route path="/notes" element={<Notes />} />
               <Route path="/temps" element={<Temps />} />
             </Routes>
