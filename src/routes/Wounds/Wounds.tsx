@@ -5,15 +5,54 @@ import HeartBrokenIcon from "@mui/icons-material/HeartBroken";
 import SaveIcon from "@mui/icons-material/Save";
 import DeleteIcon from "@mui/icons-material/Delete";
 import XSymbol from "./XSymbol";
-import { useState, MouseEvent, useRef } from "react";
+import { useState, MouseEvent, useRef, useEffect } from "react";
 import { toast } from "react-toastify";
 import { v4 as uuid } from "uuid";
+import { getAuth } from "firebase/auth";
+import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
+import { firebaseApp } from "@/helper/firebase";
 
 export default function Wounds() {
   const [isAddingNewWound, setIsAddingNewWound] = useState(false);
   const [pressedX, setPressedX] = useState<string | null>(null);
-  const [wounds, setWounds] = useState<CharacterSheet["extras"]["wounds"]>([]);
+  const [extras, setExtras] = useState<CharacterSheet["extras"]>({
+    wounds: [],
+    notes: "",
+  });
   const bodyRef = useRef<HTMLDivElement>(null);
+  const auth = getAuth();
+  const db = getFirestore(firebaseApp);
+
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      if (!user) return;
+
+      getDoc(doc(db, "sheets", user.uid, "character", "extras")).then(
+        (snap) => {
+          if (snap.exists()) {
+            setExtras(snap.data() as CharacterSheet["extras"]);
+          }
+        }
+      );
+    });
+  }, [auth, db]);
+
+  const onSaveClick = () => {
+    const user = auth.currentUser;
+
+    if (!user) {
+      toast.error("Something went wrong while saving. Please try again!");
+      return;
+    }
+
+    setDoc(doc(db, "sheets", user.uid, "character", "extras"), extras)
+      .then(() => {
+        toast.success("Data saved!");
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
+  };
 
   const onBodyClick = (
     event: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
@@ -24,33 +63,33 @@ export default function Wounds() {
     const x = ((event.clientX - bounds.left) / bounds.width) * 100;
     const y = ((event.clientY - bounds.top) / bounds.height) * 100;
 
-    const woundsCopy = [...wounds];
-    woundsCopy.push({ x, y, description: "", id: uuid() });
-    setWounds(woundsCopy);
+    const extrasCopy = { ...extras };
+    extrasCopy.wounds.push({ x, y, description: "", id: uuid() });
+    setExtras(extrasCopy);
     setIsAddingNewWound(false);
   };
 
   const onWoundDescriptionChange = (id: string, newDescription: string) => {
-    const index = wounds.findIndex((wound) => wound.id === id);
+    const index = extras.wounds.findIndex((wound) => wound.id === id);
 
-    const woundsCopy = [...wounds];
-    woundsCopy[index].description = newDescription;
-    setWounds(woundsCopy);
+    const extrasCopy = { ...extras };
+    extrasCopy.wounds[index].description = newDescription;
+    setExtras(extrasCopy);
   };
 
   const deleteWound = (id: string) => {
-    const index = wounds.findIndex((wound) => wound.id === id);
+    const index = extras.wounds.findIndex((wound) => wound.id === id);
 
-    const woundsCopy = [...wounds];
-    woundsCopy.splice(index, 1);
-    setWounds(woundsCopy);
+    const extrasCopy = { ...extras };
+    extrasCopy.wounds.splice(index, 1);
+    setExtras(extrasCopy);
     setPressedX(null);
   };
 
   return (
     <div className="wounds-page">
       <div ref={bodyRef} className="body-map" onClick={onBodyClick}>
-        {wounds.sort().map(({ x, y, id }) => (
+        {extras.wounds.sort().map(({ x, y, id }) => (
           <XSymbol
             key={id}
             left={x + "%"}
@@ -83,7 +122,12 @@ export default function Wounds() {
           <span>Press where would you like to add the wound</span>
         )}
 
-        <Button startIcon={<SaveIcon />} variant="contained" color="success">
+        <Button
+          onClick={onSaveClick}
+          startIcon={<SaveIcon />}
+          variant="contained"
+          color="success"
+        >
           Save
         </Button>
 
@@ -91,8 +135,9 @@ export default function Wounds() {
           <div className="wound-details">
             <TextField
               value={
-                wounds[wounds.findIndex((wound) => wound.id === pressedX)]
-                  .description
+                extras.wounds[
+                  extras.wounds.findIndex((wound) => wound.id === pressedX)
+                ].description
               }
               onChange={(e) =>
                 onWoundDescriptionChange(pressedX, e.target.value)
