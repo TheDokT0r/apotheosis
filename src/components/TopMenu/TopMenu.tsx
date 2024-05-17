@@ -11,8 +11,9 @@ import { getAuth } from "firebase/auth";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { Divider } from "@mui/material";
+import "./TopMenu.scss";
 
-export default function SideMenu() {
+export default function TopMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ export default function SideMenu() {
   };
 
   return (
-    <div>
+    <div className="top-menu-container">
       <IconButton
         id="basic-button"
         aria-controls={open ? "basic-menu" : undefined}

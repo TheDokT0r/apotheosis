@@ -1,31 +1,30 @@
 import { Divider, TextField } from "@mui/material";
-import "./Home.scss";
 import { useEffect, useState } from "react";
 import { getAuth } from "firebase/auth";
 import { firebaseApp } from "@/helper/firebase";
 import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 
-export default function Characteristics() {
-  const [characteristics, setCharacteristics] = useState<
-    CharacterSheet["characteristics"]
-  >({});
+export default function Attributes() {
+  const [attributes, setAttributes] = useState<CharacterSheet["attributes"]>(
+    {}
+  );
 
-  const changeCharValues = (key: string, value: string) => {
-    const charsCopy = { ...characteristics };
+  const changeAttributesValues = (key: string, value: string) => {
+    const attributesCopy = { ...attributes };
 
     if (Number.isNaN(value) || value === "") {
-      charsCopy[key] = "";
+      attributesCopy[key] = "";
     } else {
-      charsCopy[key] = Number(value);
+      attributesCopy[key] = Number(value);
     }
 
-    setCharacteristics(charsCopy);
+    setAttributes(attributesCopy);
 
     const user = auth.currentUser;
     if (!user) return;
     setDoc(
-      doc(db, "sheets", user.uid, "character", "characteristics"),
-      charsCopy
+      doc(db, "sheets", user.uid, "character", "attributes"),
+      attributesCopy
     );
   };
 
@@ -39,28 +38,28 @@ export default function Characteristics() {
       }
 
       const docSnap = await getDoc(
-        doc(db, "sheets", user.uid, "character", "characteristics")
+        doc(db, "sheets", user.uid, "character", "attributes")
       );
       if (!docSnap.exists()) return;
 
-      setCharacteristics(docSnap.data());
+      setAttributes(docSnap.data());
     });
   }, [auth, db]);
 
   return (
     <div className="stats-container">
-      <h3>Characteristics</h3>
+      <h3>Attributes</h3>
       <Divider sx={{ width: "80%" }} />
       <div className="stats">
-        {Object.keys(characteristics)
+        {Object.keys(attributes)
           .sort()
           .map((key) => (
             <TextField
               sx={{ textTransform: "capitalize" }}
               key={key}
-              value={characteristics[key] ?? ""}
+              value={attributes[key] ?? ""}
               label={key}
-              onChange={(e) => changeCharValues(key, e.target.value)}
+              onChange={(e) => changeAttributesValues(key, e.target.value)}
               type="number"
             />
           ))}

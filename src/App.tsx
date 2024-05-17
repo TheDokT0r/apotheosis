@@ -10,7 +10,7 @@ const Signup = lazy(() => import("@/routes/Login/Signup"));
 const Skills = lazy(() => import("@/routes/Skills/Skills"));
 const Notes = lazy(() => import("@/routes/Notes/Notes"));
 const Temps = lazy(() => import("@/routes/Temps/Temps"));
-const Menu = lazy(() => import("@/components/SideMenu/SideMenu"));
+const TopMenu = lazy(() => import("@/components/TopMenu/TopMenu"));
 
 const darkTheme = createTheme({
   palette: {
@@ -24,7 +24,7 @@ export default function App() {
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
         <BrowserRouter>
-          <Menu />
+          <TopMenu />
           <Suspense fallback={<LoadingPage />}>
             <Routes>
               <Route path="/" element={<Home />} />

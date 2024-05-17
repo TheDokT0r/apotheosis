@@ -1,5 +1,4 @@
 import { Divider, TextField } from "@mui/material";
-import "./Home.scss";
 import { useEffect, useState } from "react";
 import { getAuth } from "firebase/auth";
 import { firebaseApp } from "@/helper/firebase";
@@ -54,7 +53,7 @@ export default function Status() {
       {Object.keys(status)
         .sort()
         .map((key) => (
-          <div>
+          <div key={key}>
             <h4
               style={{
                 textTransform: "capitalize",
