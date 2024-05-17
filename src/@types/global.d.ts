@@ -30,8 +30,10 @@ declare global {
 
     extras: {
       wounds: {
-        position: { x: number; y: number };
+        x: number;
+        y: number;
         description: string;
+        id: string;
       }[];
 
       notes: string;
