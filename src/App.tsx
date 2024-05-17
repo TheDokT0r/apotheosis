@@ -11,6 +11,7 @@ const Skills = lazy(() => import("@/routes/Skills/Skills"));
 const Wounds = lazy(() => import("@/routes/Wounds/Wounds"));
 const Notes = lazy(() => import("@/routes/Notes/Notes"));
 const Temps = lazy(() => import("@/routes/Temps/Temps"));
+const Abilities = lazy(() => import("@/routes/Abilities/Abilities"));
 const TopMenu = lazy(() => import("@/components/TopMenu/TopMenu"));
 
 const darkTheme = createTheme({
@@ -33,6 +34,7 @@ export default function App() {
               <Route path="/signup" element={<Signup />} />
               <Route path="/skills" element={<Skills />} />
               <Route path="/wounds" element={<Wounds />} />
+              <Route path="/abilities" element={<Abilities />} />
               <Route path="/notes" element={<Notes />} />
               <Route path="/temps" element={<Temps />} />
             </Routes>

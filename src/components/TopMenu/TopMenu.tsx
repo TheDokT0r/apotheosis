@@ -8,6 +8,7 @@ import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import HeartBrokenIcon from "@mui/icons-material/HeartBroken";
 import LogoutIcon from "@mui/icons-material/Logout";
 import NoteAltIcon from "@mui/icons-material/NoteAlt";
+import BoltIcon from "@mui/icons-material/Bolt";
 import { getAuth } from "firebase/auth";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -67,7 +68,8 @@ export default function TopMenu() {
           }}
         >
           <MenuItem onClick={() => goTo("/")}>
-            <AccountCircleIcon /> Basic Profile
+            <AccountCircleIcon />
+            Basic Profile
           </MenuItem>
 
           <MenuItem onClick={() => goTo("/skills")}>
@@ -78,6 +80,11 @@ export default function TopMenu() {
           <MenuItem onClick={() => goTo("/wounds")}>
             <HeartBrokenIcon />
             Wounds
+          </MenuItem>
+
+          <MenuItem onClick={() => goTo("/abilities")}>
+            <BoltIcon />
+            Abilities
           </MenuItem>
 
           <MenuItem onClick={() => goTo("/notes")}>
