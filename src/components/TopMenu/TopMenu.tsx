@@ -14,7 +14,7 @@ import GamepadIcon from "@mui/icons-material/Gamepad";
 import { getAuth } from "firebase/auth";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { AppBar, Divider, Toolbar, Box } from "@mui/material";
+import { AppBar, Divider, Toolbar, Box, Typography } from "@mui/material";
 import "./TopMenu.scss";
 
 export default function TopMenu() {
@@ -103,6 +103,10 @@ export default function TopMenu() {
             <span>Build 2.0 - Caesar</span>
           </MenuItem>
         </Menu>
+
+        <Typography sx={{ userSelect: "none" }} fontFamily="Creepshow" variant="h6">
+          Apotheosis - Character Sheet
+        </Typography>
 
         <Box position="absolute" right="2%">
           <IconButton onClick={() => goTo("/game")}>

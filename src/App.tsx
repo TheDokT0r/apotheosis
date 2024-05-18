@@ -19,6 +19,9 @@ const darkTheme = createTheme({
   palette: {
     mode: "dark",
   },
+  typography: {
+    fontFamily: "JetBrains Mono, monospace",
+  },
 });
 
 export default function App() {
