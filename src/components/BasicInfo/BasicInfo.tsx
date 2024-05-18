@@ -44,6 +44,7 @@ export default function BasicInfo() {
 
   useEffect(() => {
     auth.onAuthStateChanged(async (user) => {
+      setLoading(true);
       if (!user) {
         navigate("/login");
         return;

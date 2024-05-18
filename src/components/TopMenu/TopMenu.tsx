@@ -9,6 +9,7 @@ import HeartBrokenIcon from "@mui/icons-material/HeartBroken";
 import LogoutIcon from "@mui/icons-material/Logout";
 import NoteAltIcon from "@mui/icons-material/NoteAlt";
 import BoltIcon from "@mui/icons-material/Bolt";
+import GitHubIcon from "@mui/icons-material/GitHub";
 import { getAuth } from "firebase/auth";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -101,6 +102,10 @@ export default function TopMenu() {
             <span>Build 2.0 - Caesar</span>
           </MenuItem>
         </Menu>
+
+        <IconButton sx={{position: 'absolute', right: '2%'}} size="large" edge="end" href="https://github.com/TheDokT0r/apotheosis">
+          <GitHubIcon fontSize="inherit"/>
+        </IconButton>
       </Toolbar>
     </AppBar>
   );

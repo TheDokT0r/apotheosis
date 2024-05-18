@@ -5,17 +5,21 @@ import { firebaseApp } from "@/helper/firebase";
 import { getDoc, getFirestore, doc, setDoc } from "firebase/firestore";
 import { Button, Divider, TextField } from "@mui/material";
 import { toast } from "react-toastify";
+import LoadingPage from "@/components/LoadingPage/LoadingPage";
 
 export default function Notes() {
   const [extras, setExtras] = useState<CharacterSheet["extras"]>({
     wounds: [],
     notes: "",
   });
+  const [loading, setLoading] = useState(true);
+
   const auth = getAuth(firebaseApp);
   const db = getFirestore(firebaseApp);
 
   useEffect(() => {
     auth.onAuthStateChanged(async (user) => {
+      setLoading(true);
       if (!user) return;
 
       const docSnap = await getDoc(
@@ -25,10 +29,10 @@ export default function Notes() {
       if (docSnap.exists()) {
         setExtras(docSnap.data() as CharacterSheet["extras"]);
       }
+
+      setLoading(false);
     });
   }, [auth, db]);
-
-  console.log(extras);
 
   const saveNotes = async () => {
     const user = getAuth().currentUser;
@@ -44,6 +48,8 @@ export default function Notes() {
         toast.error(error.message);
       });
   };
+
+  if (loading) return <LoadingPage />;
 
   return (
     <div className="notes-page">

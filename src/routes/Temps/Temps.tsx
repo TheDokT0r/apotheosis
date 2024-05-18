@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { TextField } from "@mui/material";
 import "./Temps.scss";
 
-const temps = ["spells", "abilities", "equipment"];
+const temps = ["spells", "equipment"];
 
 export default function Temps() {
   const [tempData, setTempData] = useState<{ [key: string]: string }>({});

@@ -11,6 +11,7 @@ import { v4 as uuid } from "uuid";
 import { getAuth } from "firebase/auth";
 import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 import { firebaseApp } from "@/helper/firebase";
+import LoadingPage from "@/components/LoadingPage/LoadingPage";
 
 export default function Wounds() {
   const [isAddingNewWound, setIsAddingNewWound] = useState(false);
@@ -19,18 +20,23 @@ export default function Wounds() {
     wounds: [],
     notes: "",
   });
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
   const bodyRef = useRef<HTMLDivElement>(null);
   const auth = getAuth();
   const db = getFirestore(firebaseApp);
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
+      setLoading(true);
       if (!user) return;
 
       getDoc(doc(db, "sheets", user.uid, "character", "extras")).then(
         (snap) => {
           if (snap.exists()) {
             setExtras(snap.data() as CharacterSheet["extras"]);
+            setLoading(false);
           }
         }
       );
@@ -38,6 +44,7 @@ export default function Wounds() {
   }, [auth, db]);
 
   const onSaveClick = () => {
+    setSaving(true);
     const user = auth.currentUser;
 
     if (!user) {
@@ -52,6 +59,8 @@ export default function Wounds() {
       .catch((error) => {
         toast.error(error.message);
       });
+
+    setSaving(false);
   };
 
   const onBodyClick = (
@@ -85,6 +94,8 @@ export default function Wounds() {
     setExtras(extrasCopy);
     setPressedX(null);
   };
+
+  if (loading) return <LoadingPage />;
 
   return (
     <div className="wounds-page">
@@ -123,6 +134,7 @@ export default function Wounds() {
         )}
 
         <Button
+          disabled={saving}
           onClick={onSaveClick}
           startIcon={<SaveIcon />}
           variant="contained"

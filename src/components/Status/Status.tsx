@@ -3,9 +3,11 @@ import { useEffect, useState } from "react";
 import { getAuth } from "firebase/auth";
 import { firebaseApp } from "@/helper/firebase";
 import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
+import LoadingPage from "../LoadingPage/LoadingPage";
 
 export default function Status() {
   const [status, setStatus] = useState<CharacterSheet["status"]>({});
+  const [loading, setLoading] = useState(true);
 
   const changeStatusValues = (
     key: string,
@@ -32,6 +34,7 @@ export default function Status() {
 
   useEffect(() => {
     auth.onAuthStateChanged(async (user) => {
+      setLoading(true);
       if (!user) {
         return;
       }
@@ -42,8 +45,11 @@ export default function Status() {
       if (!docSnap.exists()) return;
 
       setStatus(docSnap.data());
+      setLoading(false);
     });
   }, [auth, db]);
+
+  if (loading) return <LoadingPage />;
 
   return (
     <div>

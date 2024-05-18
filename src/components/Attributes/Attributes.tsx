@@ -3,11 +3,14 @@ import { useEffect, useState } from "react";
 import { getAuth } from "firebase/auth";
 import { firebaseApp } from "@/helper/firebase";
 import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
+import LoadingPage from "../LoadingPage/LoadingPage";
 
 export default function Attributes() {
   const [attributes, setAttributes] = useState<CharacterSheet["attributes"]>(
     {}
   );
+
+  const [loading, setLoading] = useState(true);
 
   const changeAttributesValues = (key: string, value: string) => {
     const attributesCopy = { ...attributes };
@@ -33,6 +36,7 @@ export default function Attributes() {
 
   useEffect(() => {
     auth.onAuthStateChanged(async (user) => {
+      setLoading(true);
       if (!user) {
         return;
       }
@@ -43,8 +47,11 @@ export default function Attributes() {
       if (!docSnap.exists()) return;
 
       setAttributes(docSnap.data());
+      setLoading(false);
     });
   }, [auth, db]);
+
+  if (loading) return <LoadingPage />;
 
   return (
     <div className="stats-container">

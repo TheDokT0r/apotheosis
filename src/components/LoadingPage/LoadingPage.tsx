@@ -4,13 +4,11 @@ export default function LoadingPage() {
   return (
     <div
       style={{
-        width: "100%",
-        height: "100%",
         display: "grid",
         placeItems: "center",
       }}
     >
-      <CircularProgress size="large" />
+      <CircularProgress size="5rem" color="primary" />
     </div>
   );
 }

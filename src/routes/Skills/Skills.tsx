@@ -16,9 +16,11 @@ import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Skills.scss";
+import LoadingPage from "@/components/LoadingPage/LoadingPage";
 
 export default function Skills() {
   const [skills, setSkills] = useState<CharacterSheet["skills"]>({});
+  const [loading, setLoading] = useState(true);
 
   const auth = getAuth(firebaseApp);
   const db = getFirestore(firebaseApp);
@@ -26,6 +28,7 @@ export default function Skills() {
 
   useEffect(() => {
     auth.onAuthStateChanged(async (user) => {
+      setLoading(true);
       if (!user) {
         navigate("/");
         return;
@@ -38,6 +41,7 @@ export default function Skills() {
       if (!docSnap.exists()) return;
 
       setSkills(docSnap.data());
+      setLoading(false);
     });
   }, [auth, db, navigate]);
 
@@ -76,6 +80,8 @@ export default function Skills() {
       skillsCopy
     );
   };
+
+  if (loading) return <LoadingPage />;
 
   return (
     <Card variant="outlined">
