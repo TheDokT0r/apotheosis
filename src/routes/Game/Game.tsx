@@ -66,7 +66,6 @@ export default function Game() {
 
     // Enemy's turn
     const positions = getRandomUnusedPosition(boardCopy);
-    console.log(positions);
 
     if (positions) {
       boardCopy[positions.x][positions.y] = "O";
