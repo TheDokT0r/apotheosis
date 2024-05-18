@@ -1,4 +1,4 @@
-import { Button, FormControl, TextField } from "@mui/material";
+import { Button, FormControl, TextField, Typography } from "@mui/material";
 import "./Login.scss";
 import { useState } from "react";
 import LoginIcon from "@mui/icons-material/Login";
@@ -21,11 +21,11 @@ export default function Login() {
     signInWithEmailAndPassword(auth, email, password)
       .then(async () => {
         // const db = getFirestore(firebaseApp);
-        // const basicInfo = await getDoc(doc(db, 'sheets', user.uid, 'character', 'basic_info')); 
+        // const basicInfo = await getDoc(doc(db, 'sheets', user.uid, 'character', 'basic_info'));
         // if(!basicInfo.exists()) {
         //   toast.success(`Welcome back ${basicInfo.data()!.player_name}`);
         // }
-        navigate('/');
+        navigate("/");
       })
       .catch((error) => {
         toast.error(error.message);
@@ -35,7 +35,9 @@ export default function Login() {
 
   return (
     <FormControl variant="outlined" className="login-form">
-      <h1>Login To Start Your Adventure!</h1>
+      <Typography variant="h6" fontFamily="Brush-King" textAlign="center">
+        Login To Start Your Adventure!
+      </Typography>
       <TextField
         sx={{ margin: "2rem" }}
         type="email"
@@ -59,10 +61,10 @@ export default function Login() {
         Login
       </Button>
 
-      <p>
+      <Typography variant="body1" marginTop="1rem">
         Don't have an account yet?{" "}
         <a onClick={() => navigate("/signup")}>Create one now!</a>
-      </p>
+      </Typography>
     </FormControl>
   );
 }

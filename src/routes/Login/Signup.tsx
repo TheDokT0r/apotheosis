@@ -1,4 +1,4 @@
-import { FormControl, TextField, Button } from "@mui/material";
+import { FormControl, TextField, Button, Typography } from "@mui/material";
 import "./Login.scss";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -34,7 +34,7 @@ export default function Signup() {
       .then(async () => {
         await initUser(username);
         toast.success(`Welcome, ${username}!`);
-        navigate('/');
+        navigate("/");
       })
       .catch((error) => toast.error(error.message));
   };
@@ -82,10 +82,10 @@ export default function Signup() {
         Signup
       </Button>
 
-      <p>
+      <Typography variant="body1" marginTop="1rem">
         Already have an account?{" "}
         <a onClick={() => navigate("/login")}>Log In!</a>
-      </p>
+      </Typography>
     </FormControl>
   );
 }
