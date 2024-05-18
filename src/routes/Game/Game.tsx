@@ -1,5 +1,5 @@
 import { CSSProperties, useEffect, useState } from "react";
-import { Box, Button, Card, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import "./Game.scss";
 import { toast } from "react-toastify";
 import checkVictory from "./checkVictory";
