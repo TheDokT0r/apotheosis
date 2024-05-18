@@ -10,10 +10,11 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import NoteAltIcon from "@mui/icons-material/NoteAlt";
 import BoltIcon from "@mui/icons-material/Bolt";
 import GitHubIcon from "@mui/icons-material/GitHub";
+import GamepadIcon from "@mui/icons-material/Gamepad";
 import { getAuth } from "firebase/auth";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { AppBar, Divider, Toolbar } from "@mui/material";
+import { AppBar, Divider, Toolbar, Box } from "@mui/material";
 import "./TopMenu.scss";
 
 export default function TopMenu() {
@@ -103,9 +104,19 @@ export default function TopMenu() {
           </MenuItem>
         </Menu>
 
-        <IconButton sx={{position: 'absolute', right: '2%'}} size="large" edge="end" href="https://github.com/TheDokT0r/apotheosis">
-          <GitHubIcon fontSize="inherit"/>
-        </IconButton>
+        <Box position="absolute" right="2%">
+          <IconButton onClick={() => goTo("/game")}>
+            <GamepadIcon />
+          </IconButton>
+
+          <IconButton
+            size="large"
+            edge="end"
+            href="https://github.com/TheDokT0r/apotheosis"
+          >
+            <GitHubIcon fontSize="inherit" />
+          </IconButton>
+        </Box>
       </Toolbar>
     </AppBar>
   );
