@@ -46,7 +46,6 @@ export default function BasicInfo() {
     auth.onAuthStateChanged(async (user) => {
       setLoading(true);
       if (!user) {
-        navigate("/login");
         return;
       }
 

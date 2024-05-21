@@ -4,9 +4,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { toast } from "react-toastify";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
-import { firebaseApp } from "@/helper/firebase";
-import initUser from "@/helper/initUser";
+import axios from "axios";
+import { BACKEND_URL } from "@/helper/consts";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
@@ -29,14 +28,17 @@ export default function Signup() {
       return;
     }
 
-    const auth = getAuth(firebaseApp);
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(async () => {
-        await initUser(username);
-        toast.success(`Welcome, ${username}!`);
-        navigate("/");
-      })
-      .catch((error) => toast.error(error.message));
+    const response = await axios.post(BACKEND_URL + "/usr/create", {
+      email,
+      username,
+      password,
+    });
+
+    if (response.status === 200) {
+      localStorage.setItem("token", response.data.token);
+      toast.success(`Welcome, ${username}`!);
+      navigate("/");
+    }
   };
 
   return (
