@@ -5,6 +5,8 @@ import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { firebaseApp } from "@/helper/firebase";
 import LoadingPage from "../LoadingPage/LoadingPage";
+import { getCharacterData } from "@/helper/character";
+import { toast } from "react-toastify";
 
 const archetypes = [
   "Fleshless",
@@ -23,41 +25,23 @@ const archetypes = [
 export default function BasicInfo() {
   const [loading, setLoading] = useState(true);
   const [basicInfo, setBasicInfo] = useState<CharacterSheet["basic_info"]>();
-  const navigate = useNavigate();
-  const auth = getAuth(firebaseApp);
-  const db = getFirestore(firebaseApp);
 
   const changeBasicInfoValue = (key: string, value: string) => {
-    const basicInfoCopy = { ...basicInfo };
-    basicInfoCopy[key] = value;
-
-    setBasicInfo(basicInfoCopy);
-
-    console.log({ value });
-    const user = auth.currentUser;
-    if (!user) return;
-    setDoc(
-      doc(db, "sheets", user.uid, "character", "basic_info"),
-      basicInfoCopy
-    );
   };
 
   useEffect(() => {
-    auth.onAuthStateChanged(async (user) => {
-      setLoading(true);
-      if (!user) {
+    setLoading(true);
+    getCharacterData("basic_info").then((res) => {
+      if (!res) {
+        toast.error("Unable to obtain data");
+        setLoading(false);
         return;
       }
 
-      const docSnap = await getDoc(
-        doc(db, "sheets", user.uid, "character", "basic_info")
-      );
-      if (!docSnap.exists()) return;
-
-      setBasicInfo(docSnap.data());
+      setBasicInfo(res);
       setLoading(false);
     });
-  }, [auth, db, navigate]);
+  }, []);
 
   if (loading || !basicInfo) return <LoadingPage />;
 
