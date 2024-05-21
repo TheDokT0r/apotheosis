@@ -15,28 +15,16 @@ export default function Login() {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
-    // const auth = getAuth(firebaseApp);
-    // signInWithEmailAndPassword(auth, email, password)
-    //   .then(async () => {
-    //     // const db = getFirestore(firebaseApp);
-    //     // const basicInfo = await getDoc(doc(db, 'sheets', user.uid, 'character', 'basic_info'));
-    //     // if(!basicInfo.exists()) {
-    //     //   toast.success(`Welcome back ${basicInfo.data()!.player_name}`);
-    //     // }
-    //     navigate("/");
-    //   })
-    //   .catch((error) => {
-    //     toast.error(error.message);
-    //     return;
-    //   });
 
     axios.get("/login", { data: { email, password } }).then((res) => {
+      console.log(res);
       if (res.status !== 200) {
         toast.error(res.data);
         return;
       }
 
       toast.success("Welcome back!");
+      localStorage.setItem("token", res.data.token);
       navigate("/");
     });
   };

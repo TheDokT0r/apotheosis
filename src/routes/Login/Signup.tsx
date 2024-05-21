@@ -6,6 +6,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { BACKEND_URL } from "@/helper/consts";
+import errorHandler from "@/helper/errorHandler";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
@@ -28,16 +29,22 @@ export default function Signup() {
       return;
     }
 
-    const response = await axios.post(BACKEND_URL + "/usr/create", {
-      email,
-      username,
-      password,
-    });
+    try {
+      const response = await axios.post(BACKEND_URL + "/usr/create", {
+        email,
+        username,
+        password,
+      });
 
-    if (response.status === 200) {
-      localStorage.setItem("token", response.data.token);
-      toast.success(`Welcome, ${username}`!);
-      navigate("/");
+      if (response.status === 200) {
+        localStorage.setItem("token", response.data.token);
+        toast.success(`Welcome, ${username}`!);
+        navigate("/");
+        return;
+      }
+      toast.error(response.data);
+    } catch (e) {
+      errorHandler(e);
     }
   };
 
