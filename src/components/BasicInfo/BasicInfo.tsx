@@ -1,9 +1,5 @@
 import { useState, useEffect } from "react";
 import { TextField, Divider, Autocomplete } from "@mui/material";
-import { getAuth } from "firebase/auth";
-import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
-import { firebaseApp } from "@/helper/firebase";
 import LoadingPage from "../LoadingPage/LoadingPage";
 import { getCharacterData } from "@/helper/character";
 import { toast } from "react-toastify";
@@ -26,21 +22,30 @@ export default function BasicInfo() {
   const [loading, setLoading] = useState(true);
   const [basicInfo, setBasicInfo] = useState<CharacterSheet["basic_info"]>();
 
-  const changeBasicInfoValue = (key: string, value: string) => {
-  };
+  const changeBasicInfoValue = (key: string, value: string) => {};
 
   useEffect(() => {
-    setLoading(true);
-    getCharacterData("basic_info").then((res) => {
-      if (!res) {
-        toast.error("Unable to obtain data");
-        setLoading(false);
-        return;
-      }
+    const fetchData = async () => {
+      setLoading(true);
 
-      setBasicInfo(res);
-      setLoading(false);
-    });
+      try {
+        const res = await getCharacterData("basic_info");
+        console.log({res})
+
+        if (res) {
+          setBasicInfo(res);
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.error("Error in fetchData:", error);
+        toast.error("An error occurred while fetching data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   if (loading || !basicInfo) return <LoadingPage />;
