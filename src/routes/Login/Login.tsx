@@ -5,6 +5,8 @@ import LoginIcon from "@mui/icons-material/Login";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { BACKEND_URL } from "@/helper/consts";
+import errorHandler from "@/helper/errorHandler";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -15,18 +17,19 @@ export default function Login() {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
+    axios
+      .post(`${BACKEND_URL}/usr/login`, { email, password })
+      .then((res) => {
+        if (res.status !== 200) {
+          toast.error(res.data);
+          return;
+        }
 
-    axios.get("/login", { data: { email, password } }).then((res) => {
-      console.log(res);
-      if (res.status !== 200) {
-        toast.error(res.data);
-        return;
-      }
-
-      toast.success("Welcome back!");
-      localStorage.setItem("token", res.data.token);
-      navigate("/");
-    });
+        toast.success("Welcome back!");
+        localStorage.setItem("token", res.data.token);
+        navigate("/");
+      })
+      .catch((e) => errorHandler(e));
   };
 
   return (
