@@ -1,10 +1,7 @@
 import { Divider, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
-import { getAuth } from "firebase/auth";
-import { firebaseApp } from "@/helper/firebase";
-import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 import LoadingPage from "../LoadingPage/LoadingPage";
-import { getCharacterData } from "@/helper/character";
+import { getCharacterData, updateCharacterData } from "@/helper/character";
 import errorHandler from "@/helper/errorHandler";
 
 export default function Attributes() {
@@ -25,12 +22,7 @@ export default function Attributes() {
 
     setAttributes(attributesCopy);
 
-    const user = auth.currentUser;
-    if (!user) return;
-    setDoc(
-      doc(db, "sheets", user.uid, "character", "attributes"),
-      attributesCopy
-    );
+    updateCharacterData(attributes, 'attributes');
   };
 
   useEffect(() => {

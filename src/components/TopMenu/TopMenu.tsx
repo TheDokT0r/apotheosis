@@ -11,7 +11,6 @@ import NoteAltIcon from "@mui/icons-material/NoteAlt";
 import BoltIcon from "@mui/icons-material/Bolt";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import GamepadIcon from "@mui/icons-material/Gamepad";
-import { getAuth } from "firebase/auth";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { AppBar, Divider, Toolbar, Box, Typography } from "@mui/material";
@@ -30,12 +29,7 @@ export default function TopMenu() {
 
   const logoutHandler = async () => {
     handleClose();
-    await getAuth()
-      .signOut()
-      .catch((error) => {
-        toast.error(error.message);
-        return;
-      });
+    localStorage.setItem("token", "");
     toast.success("See you next time!");
     navigate("/login");
     return;
@@ -104,7 +98,11 @@ export default function TopMenu() {
           </MenuItem>
         </Menu>
 
-        <Typography sx={{ userSelect: "none" }} fontFamily="Creepshow" variant="h6">
+        <Typography
+          sx={{ userSelect: "none" }}
+          fontFamily="Creepshow"
+          variant="h6"
+        >
           Apotheosis - Character Sheet
         </Typography>
 

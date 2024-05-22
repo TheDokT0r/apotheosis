@@ -2,7 +2,6 @@ import { Divider, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import LoadingPage from "../LoadingPage/LoadingPage";
 import { getCharacterData } from "@/helper/character";
-import errorHandler from "@/helper/errorHandler";
 
 export default function Status() {
   const [status, setStatus] = useState<CharacterSheet["status"]>({});

@@ -8,10 +8,9 @@ import XSymbol from "./XSymbol";
 import { useState, MouseEvent, useRef, useEffect } from "react";
 import { toast } from "react-toastify";
 import { v4 as uuid } from "uuid";
-import { getAuth } from "firebase/auth";
-import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
-import { firebaseApp } from "@/helper/firebase";
 import LoadingPage from "@/components/LoadingPage/LoadingPage";
+import { getCharacterData, updateCharacterData } from "@/helper/character";
+import errorHandler from "@/helper/errorHandler";
 
 export default function Wounds() {
   const [isAddingNewWound, setIsAddingNewWound] = useState(false);
@@ -24,41 +23,24 @@ export default function Wounds() {
   const [saving, setSaving] = useState(false);
 
   const bodyRef = useRef<HTMLDivElement>(null);
-  const auth = getAuth();
-  const db = getFirestore(firebaseApp);
 
   useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      setLoading(true);
-      if (!user) return;
-
-      getDoc(doc(db, "sheets", user.uid, "character", "extras")).then(
-        (snap) => {
-          if (snap.exists()) {
-            setExtras(snap.data() as CharacterSheet["extras"]);
-            setLoading(false);
-          }
-        }
-      );
+    setLoading(true);
+    getCharacterData("extras").then((response) => {
+      if (response) setExtras(response);
+      setLoading(false);
     });
-  }, [auth, db]);
+  }, []);
 
   const onSaveClick = () => {
     setSaving(true);
-    const user = auth.currentUser;
 
-    if (!user) {
-      toast.error("Something went wrong while saving. Please try again!");
-      return;
+    try {
+      updateCharacterData(extras, "extras");
+      toast.success("Data saved!");
+    } catch (e) {
+      errorHandler(e);
     }
-
-    setDoc(doc(db, "sheets", user.uid, "character", "extras"), extras)
-      .then(() => {
-        toast.success("Data saved!");
-      })
-      .catch((error) => {
-        toast.error(error.message);
-      });
 
     setSaving(false);
   };
