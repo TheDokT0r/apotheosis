@@ -30,7 +30,6 @@ export default function BasicInfo() {
 
       try {
         const res = await getCharacterData("basic_info");
-        console.log({res})
 
         if (res) {
           setBasicInfo(res);
