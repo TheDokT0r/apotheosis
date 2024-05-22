@@ -1,6 +1,7 @@
 import axios from "axios";
 import { BACKEND_URL } from "./consts";
 import errorHandler from "./errorHandler";
+import socketStore from "@/stores/socketStore";
 
 const config = {
   headers: {
@@ -38,4 +39,12 @@ export const getCharacterData = async <T extends keyof CharacterSheet>(
   } catch (e) {
     errorHandler(e);
   }
+};
+
+export const updateCharacterData = <T extends keyof CharacterSheet>(
+  data: CharacterSheet[T],
+  key: T
+) => {
+  const { socket } = socketStore.getState();
+  socket.emit("updateData", { data, key });
 };

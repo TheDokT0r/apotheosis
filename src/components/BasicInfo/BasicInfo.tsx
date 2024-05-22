@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { TextField, Divider, Autocomplete } from "@mui/material";
 import LoadingPage from "../LoadingPage/LoadingPage";
-import { getCharacterData } from "@/helper/character";
+import { getCharacterData, updateCharacterData } from "@/helper/character";
 import { toast } from "react-toastify";
 
 const archetypes = [
@@ -22,7 +22,16 @@ export default function BasicInfo() {
   const [loading, setLoading] = useState(true);
   const [basicInfo, setBasicInfo] = useState<CharacterSheet["basic_info"]>();
 
-  const changeBasicInfoValue = (key: string, value: string) => {};
+  const changeBasicInfoValue = (key: string, value: string) => {
+    const basicInfoCopy = { ...basicInfo };
+    basicInfoCopy[key] = value;
+
+    setBasicInfo(basicInfoCopy);
+
+    if (basicInfo) {
+      updateCharacterData(basicInfoCopy, "basic_info");
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
