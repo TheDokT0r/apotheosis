@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
 import "./Notes.scss";
-import { getAuth } from "firebase/auth";
-import { firebaseApp } from "@/helper/firebase";
-import { getDoc, getFirestore, doc, setDoc } from "firebase/firestore";
 import { Button, Divider, TextField } from "@mui/material";
-import { toast } from "react-toastify";
 import LoadingPage from "@/components/LoadingPage/LoadingPage";
+import { getCharacterData, updateCharacterData } from "@/helper/character";
 
 export default function Notes() {
   const [extras, setExtras] = useState<CharacterSheet["extras"]>({
@@ -14,39 +11,16 @@ export default function Notes() {
   });
   const [loading, setLoading] = useState(true);
 
-  const auth = getAuth(firebaseApp);
-  const db = getFirestore(firebaseApp);
-
   useEffect(() => {
-    auth.onAuthStateChanged(async (user) => {
-      setLoading(true);
-      if (!user) return;
-
-      const docSnap = await getDoc(
-        doc(db, "sheets", user.uid, "character", "extras")
-      );
-
-      if (docSnap.exists()) {
-        setExtras(docSnap.data() as CharacterSheet["extras"]);
-      }
-
+    setLoading(true);
+    getCharacterData("extras").then((response) => {
+      if (response) setExtras(response);
       setLoading(false);
     });
-  }, [auth, db]);
+  }, []);
 
   const saveNotes = async () => {
-    const user = getAuth().currentUser;
-    if (!user) {
-      toast.error("Something went wrong while saving. Please try again!");
-      return;
-    }
-    setDoc(doc(db, "sheets", user.uid, "character", "extras"), extras)
-      .then(() => {
-        toast.success("Data saved!");
-      })
-      .catch((error) => {
-        toast.error(error.message);
-      });
+    updateCharacterData(extras, "extras");
   };
 
   if (loading) return <LoadingPage />;

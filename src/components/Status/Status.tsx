@@ -1,9 +1,7 @@
 import { Divider, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
-import { getAuth } from "firebase/auth";
-import { firebaseApp } from "@/helper/firebase";
-import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 import LoadingPage from "../LoadingPage/LoadingPage";
+import { getCharacterData } from "@/helper/character";
 
 export default function Status() {
   const [status, setStatus] = useState<CharacterSheet["status"]>({});
@@ -23,31 +21,15 @@ export default function Status() {
     }
 
     setStatus(statusCopy);
-
-    const user = auth.currentUser;
-    if (!user) return;
-    setDoc(doc(db, "sheets", user.uid, "character", "status"), statusCopy);
   };
 
-  const auth = getAuth(firebaseApp);
-  const db = getFirestore(firebaseApp);
-
   useEffect(() => {
-    auth.onAuthStateChanged(async (user) => {
-      setLoading(true);
-      if (!user) {
-        return;
-      }
-
-      const docSnap = await getDoc(
-        doc(db, "sheets", user.uid, "character", "status")
-      );
-      if (!docSnap.exists()) return;
-
-      setStatus(docSnap.data());
+    setLoading(true);
+    getCharacterData("status").then((response) => {
+      if (response) setStatus(response);
       setLoading(false);
     });
-  }, [auth, db]);
+  }, []);
 
   if (loading) return <LoadingPage />;
 

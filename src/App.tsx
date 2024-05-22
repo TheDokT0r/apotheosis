@@ -1,9 +1,13 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LoadingPage from "./components/LoadingPage/LoadingPage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/ReactToastify.min.css";
+import socketStore from "./stores/socketStore";
+import { BACKEND_URL } from "./helper/consts";
+import { io } from "socket.io-client";
+
 const Home = lazy(() => import("@/routes/Home/Home"));
 const Login = lazy(() => import("@/routes/Login/Login"));
 const Signup = lazy(() => import("@/routes/Login/Signup"));
@@ -25,6 +29,29 @@ const darkTheme = createTheme({
 });
 
 export default function App() {
+  const socketIO = socketStore((state) => state.socket);
+  const setSocket = socketStore((state) => state.setSocket);
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    const socket = io(BACKEND_URL, { query: { token } });
+    setSocket(socket);
+  }, [setSocket, token]);
+
+  useEffect(() => {
+    socketIO.on("connect", () => {
+      console.log("Connected to socket.io server");
+    });
+
+    socketIO.on("disconnect", () => {
+      console.log("Disconnected from socket io server");
+    });
+
+    return () => {
+      socketIO.close();
+    };
+  }, [socketIO]);
+
   return (
     <>
       <ThemeProvider theme={darkTheme}>

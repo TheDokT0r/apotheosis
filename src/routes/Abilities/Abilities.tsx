@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./Abilities.scss";
-import abilities, { AbilityData } from "./abilitiesHelper";
+import abilities from "./abilitiesHelper";
 import {
   Paper,
   TableContainer,
@@ -17,9 +17,12 @@ import {
 import Row from "./Row";
 import AddIcon from "@mui/icons-material/Add";
 import { toast } from "react-toastify";
+import { getCharacterData, updateCharacterData } from "@/helper/character";
 
 export default function Abilities() {
-  const [userAbilities, setUserAbilities] = useState<AbilityData[]>([]);
+  const [userAbilities, setUserAbilities] = useState<
+    CharacterSheet["abilities"]
+  >([]);
   const [newAbility, setNewAbility] = useState("");
 
   const addAbility = () => {
@@ -29,16 +32,24 @@ export default function Abilities() {
 
     if (!newAbilityData) return;
 
-    if (userAbilities.includes(newAbilityData)) {
+    if (userAbilities.includes(newAbilityData.name)) {
       toast.error("Can't choose the same ability twice");
       return;
     }
 
     const abilitiesCopy = [...userAbilities];
-    abilitiesCopy.push(newAbilityData);
+    abilitiesCopy.push(newAbilityData.name);
     setUserAbilities(abilitiesCopy);
     setNewAbility("");
+
+    updateCharacterData(abilitiesCopy, "abilities");
   };
+
+  useEffect(() => {
+    getCharacterData("abilities").then((response) => {
+      if (response) setUserAbilities(response);
+    });
+  }, []);
 
   return (
     <div style={{ margin: "1rem" }}>
@@ -50,7 +61,7 @@ export default function Abilities() {
       >
         Abilities
       </Typography>
-      <TableContainer sx={{ borderRadius: '5px' }} component={Paper}>
+      <TableContainer sx={{ borderRadius: "5px" }} component={Paper}>
         <Toolbar component={Paper}>
           <IconButton onClick={addAbility}>
             <AddIcon />
@@ -108,7 +119,7 @@ export default function Abilities() {
           </TableHead>
           <TableBody>
             {userAbilities.sort().map((ability) => (
-              <Row ability={ability} />
+              <Row ability={abilities.find((ab) => ab.name === ability)} />
             ))}
           </TableBody>
         </Table>

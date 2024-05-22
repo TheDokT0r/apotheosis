@@ -10,6 +10,8 @@ declare global {
   }
 
   interface CharacterSheet {
+    abilities: string[];
+
     basic_info: { [key: string]: string };
 
     attributes: { [attribute: string]: number | string | null };

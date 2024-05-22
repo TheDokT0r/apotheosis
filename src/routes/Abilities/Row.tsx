@@ -13,11 +13,13 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDowIcon from "@mui/icons-material/KeyboardArrowDown";
 
 interface RowProps {
-  ability: AbilityData;
+  ability?: AbilityData;
 }
 
 export default function Row({ ability }: RowProps) {
   const [open, setOpen] = useState(false);
+
+  if (!ability) return null;
 
   return (
     <>

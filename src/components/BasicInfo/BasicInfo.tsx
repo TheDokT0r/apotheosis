@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
 import { TextField, Divider, Autocomplete } from "@mui/material";
-import { getAuth } from "firebase/auth";
-import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
-import { firebaseApp } from "@/helper/firebase";
 import LoadingPage from "../LoadingPage/LoadingPage";
+import { getCharacterData, updateCharacterData } from "@/helper/character";
+import { toast } from "react-toastify";
 
 const archetypes = [
   "Fleshless",
@@ -23,9 +21,6 @@ const archetypes = [
 export default function BasicInfo() {
   const [loading, setLoading] = useState(true);
   const [basicInfo, setBasicInfo] = useState<CharacterSheet["basic_info"]>();
-  const navigate = useNavigate();
-  const auth = getAuth(firebaseApp);
-  const db = getFirestore(firebaseApp);
 
   const changeBasicInfoValue = (key: string, value: string) => {
     const basicInfoCopy = { ...basicInfo };
@@ -33,32 +28,33 @@ export default function BasicInfo() {
 
     setBasicInfo(basicInfoCopy);
 
-    console.log({ value });
-    const user = auth.currentUser;
-    if (!user) return;
-    setDoc(
-      doc(db, "sheets", user.uid, "character", "basic_info"),
-      basicInfoCopy
-    );
+    if (basicInfo) {
+      updateCharacterData(basicInfoCopy, "basic_info");
+    }
   };
 
   useEffect(() => {
-    auth.onAuthStateChanged(async (user) => {
+    const fetchData = async () => {
       setLoading(true);
-      if (!user) {
-        navigate("/login");
-        return;
+
+      try {
+        const res = await getCharacterData("basic_info");
+
+        if (res) {
+          setBasicInfo(res);
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.error("Error in fetchData:", error);
+        toast.error("An error occurred while fetching data");
+      } finally {
+        setLoading(false);
       }
+    };
 
-      const docSnap = await getDoc(
-        doc(db, "sheets", user.uid, "character", "basic_info")
-      );
-      if (!docSnap.exists()) return;
-
-      setBasicInfo(docSnap.data());
-      setLoading(false);
-    });
-  }, [auth, db, navigate]);
+    fetchData();
+  }, []);
 
   if (loading || !basicInfo) return <LoadingPage />;
 

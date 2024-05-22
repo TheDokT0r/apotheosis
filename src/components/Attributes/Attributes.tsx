@@ -1,9 +1,8 @@
 import { Divider, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
-import { getAuth } from "firebase/auth";
-import { firebaseApp } from "@/helper/firebase";
-import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 import LoadingPage from "../LoadingPage/LoadingPage";
+import { getCharacterData, updateCharacterData } from "@/helper/character";
+import errorHandler from "@/helper/errorHandler";
 
 export default function Attributes() {
   const [attributes, setAttributes] = useState<CharacterSheet["attributes"]>(
@@ -23,33 +22,18 @@ export default function Attributes() {
 
     setAttributes(attributesCopy);
 
-    const user = auth.currentUser;
-    if (!user) return;
-    setDoc(
-      doc(db, "sheets", user.uid, "character", "attributes"),
-      attributesCopy
-    );
+    updateCharacterData(attributes, 'attributes');
   };
 
-  const auth = getAuth(firebaseApp);
-  const db = getFirestore(firebaseApp);
-
   useEffect(() => {
-    auth.onAuthStateChanged(async (user) => {
-      setLoading(true);
-      if (!user) {
-        return;
-      }
-
-      const docSnap = await getDoc(
-        doc(db, "sheets", user.uid, "character", "attributes")
-      );
-      if (!docSnap.exists()) return;
-
-      setAttributes(docSnap.data());
-      setLoading(false);
-    });
-  }, [auth, db]);
+    setLoading(true);
+    getCharacterData("attributes")
+      .then((response) => {
+        if (response) setAttributes(response);
+        setLoading(false);
+      })
+      .catch((e) => errorHandler(e));
+  }, []);
 
   if (loading) return <LoadingPage />;
 

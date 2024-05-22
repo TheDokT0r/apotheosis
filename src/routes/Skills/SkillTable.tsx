@@ -13,24 +13,21 @@ import {
   Typography,
   IconButton,
 } from "@mui/material";
-import { getAuth } from "firebase/auth";
-import { Firestore, doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDowIcon from "@mui/icons-material/KeyboardArrowDown";
+import { updateCharacterData } from "@/helper/character";
 
 interface SkillTableProps {
   tableKey: string;
   skills: CharacterSheet["skills"];
   setSkills: (newValue: CharacterSheet["skills"]) => void;
-  db: Firestore;
 }
 
 export default function SkillTable({
   tableKey,
   skills,
   setSkills,
-  db,
 }: SkillTableProps) {
   const [isOpen, setIsOpen] = useState(false);
   const onSkillChange = async (
@@ -38,17 +35,11 @@ export default function SkillTable({
     skillKey: string,
     newState: number
   ) => {
-    const user = getAuth().currentUser;
-    if (!user) return;
-
     const skillsCopy = { ...skills };
     skillsCopy[table][skillKey].skill_level = newState;
     setSkills(skillsCopy);
 
-    await setDoc(
-      doc(db, "sheets", user.uid, "character", "skills"),
-      skillsCopy
-    );
+    updateCharacterData(skillsCopy, "skills");
   };
 
   const onProChange = async (
@@ -56,17 +47,11 @@ export default function SkillTable({
     skillKey: string,
     newState: boolean
   ) => {
-    const user = getAuth().currentUser;
-    if (!user) return;
-
     const skillsCopy = { ...skills };
     skillsCopy[table][skillKey].pro = newState;
     setSkills(skillsCopy);
 
-    await setDoc(
-      doc(db, "sheets", user.uid, "character", "skills"),
-      skillsCopy
-    );
+    updateCharacterData(skillsCopy, "skills");
   };
 
   return (
@@ -80,7 +65,12 @@ export default function SkillTable({
           )}
         </IconButton>
 
-        <Typography marginBottom='2rem' variant="h6" fontFamily="Brush-King" textAlign="center">
+        <Typography
+          marginBottom="2rem"
+          variant="h6"
+          fontFamily="Brush-King"
+          textAlign="center"
+        >
           {tableKey}
         </Typography>
       </Card>
