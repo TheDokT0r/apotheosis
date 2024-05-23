@@ -119,9 +119,9 @@ export default function Wounds() {
         >
           {isAddingNewWound ? "Cancel" : "Add Wound"}
         </Button>
-        {isAddingNewWound && (
+        {/* {isAddingNewWound && (
           <span>Press where would you like to add the wound</span>
-        )}
+        )} */}
 
         <Button
           disabled={saving}
