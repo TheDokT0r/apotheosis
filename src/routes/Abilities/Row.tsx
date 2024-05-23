@@ -7,7 +7,6 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import type { AbilityData } from "./abilitiesHelper";
 import { useState } from "react";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDowIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -60,9 +59,7 @@ export default function Row({ ability }: RowProps) {
               </Typography>
               <Divider variant="middle" />
               <Typography variant="body1" gutterBottom>
-                {ability.prerequisite
-                  ? ability.prerequisite.join(", ")
-                  : "None"}
+                {ability.prerequisites ? ability.prerequisites : "None"}
               </Typography>
             </Box>
           </Collapse>

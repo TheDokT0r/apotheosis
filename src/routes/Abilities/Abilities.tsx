@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import "./Abilities.scss";
-import abilities from "./abilitiesHelper";
 import {
   Paper,
   TableContainer,
@@ -18,15 +17,42 @@ import Row from "./Row";
 import AddIcon from "@mui/icons-material/Add";
 import { toast } from "react-toastify";
 import { getCharacterData, updateCharacterData } from "@/helper/character";
+import axios from "axios";
+import { BACKEND_URL } from "@/helper/consts";
+import errorHandler from "@/helper/errorHandler";
+import LoadingPage from "@/components/LoadingPage/LoadingPage";
 
 export default function Abilities() {
   const [userAbilities, setUserAbilities] = useState<
     CharacterSheet["abilities"]
   >([]);
   const [newAbility, setNewAbility] = useState("");
+  const [allAbilities, setAllAbilities] = useState<AbilityData[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get(`${BACKEND_URL}/info/abilities`)
+      .then((response) => {
+        if (response.status !== 200) {
+          errorHandler(response);
+          return;
+        }
+        setAllAbilities(response.data as AbilityData[]);
+      })
+      .catch((e) => errorHandler(e))
+      .finally(() => setLoading(false));
+
+      getCharacterData("abilities").then((response) => {
+        if (response) setUserAbilities(response);
+        setLoading(false);
+      });
+  }, []);
+
 
   const addAbility = () => {
-    const newAbilityData = abilities.find(
+    const newAbilityData = allAbilities.find(
       (ability) => ability.name === newAbility
     );
 
@@ -45,11 +71,10 @@ export default function Abilities() {
     updateCharacterData(abilitiesCopy, "abilities");
   };
 
-  useEffect(() => {
-    getCharacterData("abilities").then((response) => {
-      if (response) setUserAbilities(response);
-    });
-  }, []);
+
+  if(loading) {
+    return <LoadingPage />
+  }
 
   return (
     <div style={{ margin: "1rem" }}>
@@ -72,7 +97,7 @@ export default function Abilities() {
               width: "13rem",
             }}
             value={newAbility}
-            options={abilities.map((ability) => ability.name)}
+            options={allAbilities.map((ability) => ability.name)}
             onChange={(_, newValue) => {
               setNewAbility(newValue ?? "");
             }}
@@ -119,7 +144,7 @@ export default function Abilities() {
           </TableHead>
           <TableBody>
             {userAbilities.sort().map((ability) => (
-              <Row ability={abilities.find((ab) => ab.name === ability)} />
+              <Row ability={allAbilities.find((ab) => ab.name === ability)} />
             ))}
           </TableBody>
         </Table>
