@@ -11,6 +11,7 @@ import { v4 as uuid } from "uuid";
 import LoadingPage from "@/components/LoadingPage/LoadingPage";
 import { getCharacterData, updateCharacterData } from "@/helper/character";
 import errorHandler from "@/helper/errorHandler";
+import Quircks from "./Quircks";
 
 export default function Wounds() {
   const [isAddingNewWound, setIsAddingNewWound] = useState(false);
@@ -166,6 +167,8 @@ export default function Wounds() {
           </div>
         )}
       </Card>
+
+      <Quircks />
     </div>
   );
 }
