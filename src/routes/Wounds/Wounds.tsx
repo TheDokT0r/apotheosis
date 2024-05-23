@@ -11,7 +11,7 @@ import { v4 as uuid } from "uuid";
 import LoadingPage from "@/components/LoadingPage/LoadingPage";
 import { getCharacterData, updateCharacterData } from "@/helper/character";
 import errorHandler from "@/helper/errorHandler";
-import Quircks from "./Quircks";
+import Quirks from "./Quirks";
 
 export default function Wounds() {
   const [isAddingNewWound, setIsAddingNewWound] = useState(false);
@@ -77,10 +77,12 @@ export default function Wounds() {
   const deleteWound = (id: string) => {
     const index = wounds.findIndex((wound) => wound.id === id);
 
-    const extrasCopy = { ...wounds };
-    extrasCopy.splice(index, 1);
-    setWounds(extrasCopy);
+    const woundsCopy = [...wounds];
+    woundsCopy.splice(index, 1);
+    setWounds(woundsCopy);
     setPressedX(null);
+
+    updateCharacterData(woundsCopy, "wounds");
   };
 
   if (loading) return <LoadingPage />;
@@ -168,7 +170,7 @@ export default function Wounds() {
         )}
       </Card>
 
-      <Quircks />
+      <Quirks />
     </div>
   );
 }

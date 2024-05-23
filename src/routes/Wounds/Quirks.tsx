@@ -20,7 +20,7 @@ import {
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-export default function Quircks() {
+export default function Quirks() {
   const [quirks, setQuirks] = useState<CharacterSheet["quirks"]>([]);
   const [newQuirk, setNewQuirk] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
@@ -79,7 +79,7 @@ export default function Quircks() {
         textAlign="center"
         fontFamily="Brush-King"
       >
-        Quircks
+        Quirks
       </Typography>
       <TableContainer sx={{ marginTop: "2rem" }}>
         <Toolbar component={Paper}>
