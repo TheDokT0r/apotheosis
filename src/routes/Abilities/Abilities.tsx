@@ -42,12 +42,12 @@ export default function Abilities() {
         setAllAbilities(response.data as AbilityData[]);
       })
       .catch((e) => errorHandler(e))
-      .finally(() => setLoading(false));
-
-    getCharacterData("abilities").then((response) => {
-      if (response) setUserAbilities(response);
-      setLoading(false);
-    });
+      .finally(() => {
+        getCharacterData("abilities").then((response) => {
+          if (response) setUserAbilities(response);
+          setLoading(false);
+        });
+      });
   }, []);
 
   const addAbility = () => {
