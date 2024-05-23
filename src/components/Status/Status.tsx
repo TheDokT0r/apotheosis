@@ -53,16 +53,16 @@ export default function Status() {
               {key}
             </h4>
             <TextField
-              label="Total"
-              value={status[key].total}
-              onChange={(e) => changeStatusValues(key, e.target.value, "total")}
-            />
-            <TextField
               label="Current"
               value={status[key].current}
               onChange={(e) =>
                 changeStatusValues(key, e.target.value, "current")
               }
+            />
+            <TextField
+              label="Total"
+              value={status[key].total}
+              onChange={(e) => changeStatusValues(key, e.target.value, "total")}
             />
           </div>
         ))}

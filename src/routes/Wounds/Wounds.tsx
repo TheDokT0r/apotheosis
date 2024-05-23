@@ -15,10 +15,7 @@ import errorHandler from "@/helper/errorHandler";
 export default function Wounds() {
   const [isAddingNewWound, setIsAddingNewWound] = useState(false);
   const [pressedX, setPressedX] = useState<string | null>(null);
-  const [extras, setExtras] = useState<CharacterSheet["extras"]>({
-    wounds: [],
-    notes: "",
-  });
+  const [wounds, setWounds] = useState<CharacterSheet["wounds"]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -26,8 +23,8 @@ export default function Wounds() {
 
   useEffect(() => {
     setLoading(true);
-    getCharacterData("extras").then((response) => {
-      if (response) setExtras(response);
+    getCharacterData("wounds").then((response) => {
+      if (response) setWounds(response);
       setLoading(false);
     });
   }, []);
@@ -36,7 +33,7 @@ export default function Wounds() {
     setSaving(true);
 
     try {
-      updateCharacterData(extras, "extras");
+      updateCharacterData(wounds, "wounds");
       toast.success("Data saved!");
     } catch (e) {
       errorHandler(e);
@@ -54,26 +51,34 @@ export default function Wounds() {
     const x = ((event.clientX - bounds.left) / bounds.width) * 100;
     const y = ((event.clientY - bounds.top) / bounds.height) * 100;
 
-    const extrasCopy = { ...extras };
-    extrasCopy.wounds.push({ x, y, description: "", id: uuid() });
-    setExtras(extrasCopy);
+    const woundsCopy = [...wounds];
+    woundsCopy.push({ x, y, description: "", name: "", id: uuid() });
+    setWounds(woundsCopy);
     setIsAddingNewWound(false);
   };
 
   const onWoundDescriptionChange = (id: string, newDescription: string) => {
-    const index = extras.wounds.findIndex((wound) => wound.id === id);
+    const index = wounds.findIndex((wound) => wound.id === id);
 
-    const extrasCopy = { ...extras };
-    extrasCopy.wounds[index].description = newDescription;
-    setExtras(extrasCopy);
+    const woundsCopy = [...wounds];
+    woundsCopy[index].description = newDescription;
+    setWounds(woundsCopy);
+  };
+
+  const onNameChange = (id: string, newName: string) => {
+    const index = wounds.findIndex((wound) => wound.id === id);
+
+    const woundsCopy = [...wounds];
+    woundsCopy[index].name = newName;
+    setWounds(woundsCopy);
   };
 
   const deleteWound = (id: string) => {
-    const index = extras.wounds.findIndex((wound) => wound.id === id);
+    const index = wounds.findIndex((wound) => wound.id === id);
 
-    const extrasCopy = { ...extras };
-    extrasCopy.wounds.splice(index, 1);
-    setExtras(extrasCopy);
+    const extrasCopy = { ...wounds };
+    extrasCopy.splice(index, 1);
+    setWounds(extrasCopy);
     setPressedX(null);
   };
 
@@ -82,7 +87,7 @@ export default function Wounds() {
   return (
     <div className="wounds-page">
       <div ref={bodyRef} className="body-map" onClick={onBodyClick}>
-        {extras.wounds.sort().map(({ x, y, id }) => (
+        {wounds.sort().map(({ x, y, id }) => (
           <XSymbol
             key={id}
             left={x + "%"}
@@ -129,9 +134,17 @@ export default function Wounds() {
           <div className="wound-details">
             <TextField
               value={
-                extras.wounds[
-                  extras.wounds.findIndex((wound) => wound.id === pressedX)
-                ].description
+                wounds[wounds.findIndex((wound) => wound.id === pressedX)].name
+              }
+              onChange={(e) => onNameChange(pressedX, e.target.value)}
+              sx={{ marginTop: "1rem" }}
+              label="Name"
+            />
+
+            <TextField
+              value={
+                wounds[wounds.findIndex((wound) => wound.id === pressedX)]
+                  .description
               }
               onChange={(e) =>
                 onWoundDescriptionChange(pressedX, e.target.value)

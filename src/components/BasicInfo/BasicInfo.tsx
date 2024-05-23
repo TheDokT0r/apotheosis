@@ -68,13 +68,6 @@ export default function BasicInfo() {
       />
       <div>
         <TextField
-          label="Player Name"
-          key="player_name"
-          value={basicInfo.player_name}
-          onChange={(e) => changeBasicInfoValue("player_name", e.target.value)}
-        />
-
-        <TextField
           label="Character Name"
           key="character_name"
           value={basicInfo.character_name}

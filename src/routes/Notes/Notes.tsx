@@ -5,22 +5,20 @@ import LoadingPage from "@/components/LoadingPage/LoadingPage";
 import { getCharacterData, updateCharacterData } from "@/helper/character";
 
 export default function Notes() {
-  const [extras, setExtras] = useState<CharacterSheet["extras"]>({
-    wounds: [],
-    notes: "",
-  });
+  const [notes, setNotes] = useState<CharacterSheet["notes"]>("");
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);
-    getCharacterData("extras").then((response) => {
-      if (response) setExtras(response);
+    getCharacterData("notes").then((response) => {
+      if (response) setNotes(response);
       setLoading(false);
     });
   }, []);
 
   const saveNotes = async () => {
-    updateCharacterData(extras, "extras");
+    updateCharacterData(notes, "notes");
   };
 
   if (loading) return <LoadingPage />;
@@ -36,11 +34,9 @@ export default function Notes() {
       <TextField
         sx={{ width: "60%" }}
         placeholder="Your Notes Here"
-        value={extras.notes}
+        value={notes}
         onChange={(e) => {
-          const extrasCopy = { ...extras };
-          extrasCopy.notes = e.target.value;
-          setExtras(extrasCopy);
+          setNotes(e.target.value);
         }}
         multiline
       />

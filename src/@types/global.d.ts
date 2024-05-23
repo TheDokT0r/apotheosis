@@ -4,14 +4,22 @@ declare global {
   type ThemePlate = "Rust" | "Silver" | "Gold" | "Bronze";
   type Hex = `#${string}`;
 
+  interface UserDetails {
+    username: string;
+    hashPassword: string;
+    email: string;
+    creationDate: Date;
+    isGM: boolean;
+    _id: ObjectId;
+  }
+
   interface SkillData {
     pro: boolean;
     skill_level: number;
   }
 
   interface CharacterSheet {
-    abilities: string[];
-
+    owner: string;
     basic_info: { [key: string]: string };
 
     attributes: { [attribute: string]: number | string | null };
@@ -30,22 +38,26 @@ declare global {
       };
     };
 
-    extras: {
-      wounds: {
-        x: number;
-        y: number;
-        description: string;
-        id: string;
-      }[];
+    wounds: {
+      x: number;
+      y: number;
+      name: string;
+      description: string;
+      id: string;
+    }[];
 
-      notes: string;
-    };
-  }
+    quirks: {
+      name: string;
+      description: string;
+      id: string;
+    }[];
 
-  interface CharacterMetaData {
+    notes: string;
+
     creationDate: Date;
-    lastUpdate: Date;
-    isGM: boolean;
+    _id: ObjectId;
+
+    abilities: string[];
   }
 }
 

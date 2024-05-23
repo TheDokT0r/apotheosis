@@ -82,7 +82,7 @@ export default function SkillTable({
                 Skill Name
               </TableCell>
               <TableCell sx={{ fontFamily: "Creepshow", fontSize: "1.6rem" }}>
-                Pro
+                Proficiency
               </TableCell>
               <TableCell sx={{ fontFamily: "Creepshow", fontSize: "1.6rem" }}>
                 Skill Level
