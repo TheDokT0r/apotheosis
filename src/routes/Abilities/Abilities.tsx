@@ -44,12 +44,11 @@ export default function Abilities() {
       .catch((e) => errorHandler(e))
       .finally(() => setLoading(false));
 
-      getCharacterData("abilities").then((response) => {
-        if (response) setUserAbilities(response);
-        setLoading(false);
-      });
+    getCharacterData("abilities").then((response) => {
+      if (response) setUserAbilities(response);
+      setLoading(false);
+    });
   }, []);
-
 
   const addAbility = () => {
     const newAbilityData = allAbilities.find(
@@ -71,9 +70,8 @@ export default function Abilities() {
     updateCharacterData(abilitiesCopy, "abilities");
   };
 
-
-  if(loading) {
-    return <LoadingPage />
+  if (loading) {
+    return <LoadingPage />;
   }
 
   return (
@@ -144,7 +142,11 @@ export default function Abilities() {
           </TableHead>
           <TableBody>
             {userAbilities.sort().map((ability) => (
-              <Row ability={allAbilities.find((ab) => ab.name === ability)} />
+              <Row
+                ability={allAbilities.find((ab) => ab.name === ability)}
+                abilities={userAbilities}
+                setAbilities={setUserAbilities}
+              />
             ))}
           </TableBody>
         </Table>
