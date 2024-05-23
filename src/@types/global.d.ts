@@ -13,6 +13,14 @@ declare global {
     _id: ObjectId;
   }
 
+  interface AbilityData {
+    name: string;
+    rank: number;
+    skill: string;
+    description: string;
+    prerequisites: string | null;
+  }
+
   interface SkillData {
     pro: boolean;
     skill_level: number;
