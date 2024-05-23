@@ -11,6 +11,7 @@ import NoteAltIcon from "@mui/icons-material/NoteAlt";
 import BoltIcon from "@mui/icons-material/Bolt";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import GamepadIcon from "@mui/icons-material/Gamepad";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { AppBar, Divider, Toolbar, Box, Typography } from "@mui/material";
@@ -109,6 +110,12 @@ export default function TopMenu() {
         <Box position="absolute" right="2%">
           <IconButton onClick={() => goTo("/game")}>
             <GamepadIcon />
+          </IconButton>
+
+          <IconButton
+            onClick={() => window.open("https://apotheosis.probablyily.studio")}
+          >
+            <MenuBookIcon />
           </IconButton>
 
           <IconButton
