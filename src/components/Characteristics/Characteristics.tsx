@@ -22,7 +22,7 @@ export default function Characteristics() {
 
     setCharacteristics(charsCopy);
 
-    updateCharacterData(characteristics, 'characteristics');
+    updateCharacterData(charsCopy, 'characteristics');
   };
 
   useEffect(() => {
