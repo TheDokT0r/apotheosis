@@ -121,7 +121,9 @@ export default function TopMenu() {
           <IconButton
             size="large"
             edge="end"
-            href="https://github.com/TheDokT0r/apotheosis"
+            onClick={() =>
+              window.open("https://github.com/TheDokT0r/apotheosis")
+            }
           >
             <GitHubIcon fontSize="inherit" />
           </IconButton>
