@@ -53,6 +53,7 @@ export default function Status() {
               {key}
             </h4>
             <TextField
+              type="number"
               label="Current"
               value={status[key].current}
               onChange={(e) =>
@@ -60,6 +61,7 @@ export default function Status() {
               }
             />
             <TextField
+              type="number"
               label="Total"
               value={status[key].total}
               onChange={(e) => changeStatusValues(key, e.target.value, "total")}
