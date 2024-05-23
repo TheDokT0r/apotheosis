@@ -7,18 +7,21 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { BACKEND_URL } from "@/helper/consts";
 import errorHandler from "@/helper/errorHandler";
+import LoadingPage from "@/components/LoadingPage/LoadingPage";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const onSignupPress = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
+    setLoading(true);
     if (!email || !username || !password || !confirmPassword) {
       toast.error("Please fill up all data!");
       return;
@@ -36,17 +39,22 @@ export default function Signup() {
         password,
       });
 
-      if (response.status === 200) {
-        localStorage.setItem("token", response.data.token);
-        toast.success(`Welcome, ${username}`!);
-        navigate("/");
+      if (response.status !== 200) {
+        toast.error(response.data);
         return;
       }
-      toast.error(response.data);
+      
+      localStorage.setItem("token", response.data.token);
+      toast.success(`Welcome, ${username}`!);
+      navigate("/");
     } catch (e) {
       errorHandler(e);
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) return <LoadingPage />;
 
   return (
     <FormControl variant="outlined" className="login-form">
