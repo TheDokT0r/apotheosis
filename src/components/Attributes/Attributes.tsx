@@ -1,18 +1,14 @@
 import { Divider, TextField } from "@mui/material";
-import { useEffect, useState } from "react";
 import LoadingPage from "../LoadingPage/LoadingPage";
-import { getCharacterData, updateCharacterData } from "@/helper/character";
-import errorHandler from "@/helper/errorHandler";
+import { useCharacter } from "@/stores/characterStore";
 
 export default function Attributes() {
-  const [attributes, setAttributes] = useState<CharacterSheet["attributes"]>(
-    {}
-  );
-
-  const [loading, setLoading] = useState(true);
+  const { characterData, setSpecificCharacterData } = useCharacter();
 
   const changeAttributesValues = (key: string, value: string) => {
-    const attributesCopy = { ...attributes };
+    if (!characterData) return;
+
+    const attributesCopy = characterData.attributes;
 
     if (Number.isNaN(value) || value === "") {
       attributesCopy[key] = "";
@@ -20,22 +16,12 @@ export default function Attributes() {
       attributesCopy[key] = Number(value);
     }
 
-    setAttributes(attributesCopy);
-
-    updateCharacterData(attributesCopy, 'attributes');
+    setSpecificCharacterData("attributes", attributesCopy);
   };
 
-  useEffect(() => {
-    setLoading(true);
-    getCharacterData("attributes")
-      .then((response) => {
-        if (response) setAttributes(response);
-        setLoading(false);
-      })
-      .catch((e) => errorHandler(e));
-  }, []);
+  if (!characterData) return <LoadingPage />;
 
-  if (loading) return <LoadingPage />;
+  const { attributes } = characterData;
 
   return (
     <div className="stats-container">

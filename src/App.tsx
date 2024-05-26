@@ -7,6 +7,7 @@ import "react-toastify/ReactToastify.min.css";
 import socketStore from "./stores/socketStore";
 import { BACKEND_URL } from "./helper/consts";
 import { io } from "socket.io-client";
+import TopMenu from "./components/TopMenu/TopMenu";
 
 const Home = lazy(() => import("@/routes/Home/Home"));
 const Login = lazy(() => import("@/routes/Login/Login"));
@@ -17,7 +18,6 @@ const Notes = lazy(() => import("@/routes/Notes/Notes"));
 const Temps = lazy(() => import("@/routes/Temps/Temps"));
 const Abilities = lazy(() => import("@/routes/Abilities/Abilities"));
 const Game = lazy(() => import("@/routes/Game/Game"));
-const TopMenu = lazy(() => import("@/components/TopMenu/TopMenu"));
 
 const darkTheme = createTheme({
   palette: {

@@ -1,8 +1,6 @@
-import { useState, useEffect } from "react";
 import { TextField, Divider, Autocomplete } from "@mui/material";
 import LoadingPage from "../LoadingPage/LoadingPage";
-import { getCharacterData, updateCharacterData } from "@/helper/character";
-import { toast } from "react-toastify";
+import { useCharacter } from "@/stores/characterStore";
 
 const archetypes = [
   "Fleshless",
@@ -19,44 +17,20 @@ const archetypes = [
 ];
 
 export default function BasicInfo() {
-  const [loading, setLoading] = useState(true);
-  const [basicInfo, setBasicInfo] = useState<CharacterSheet["basic_info"]>();
+  const { characterData, setSpecificCharacterData } = useCharacter();
 
   const changeBasicInfoValue = (key: string, value: string) => {
-    const basicInfoCopy = { ...basicInfo };
+    if (!characterData) return;
+
+    const basicInfoCopy = characterData["basic_info"];
     basicInfoCopy[key] = value;
 
-    setBasicInfo(basicInfoCopy);
-
-    if (basicInfo) {
-      updateCharacterData(basicInfoCopy, "basic_info");
-    }
+    setSpecificCharacterData("basic_info", basicInfoCopy);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
+  if (!characterData) return <LoadingPage />;
 
-      try {
-        const res = await getCharacterData("basic_info");
-
-        if (res) {
-          setBasicInfo(res);
-        }
-
-        setLoading(false);
-      } catch (error) {
-        console.error("Error in fetchData:", error);
-        toast.error("An error occurred while fetching data");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (loading || !basicInfo) return <LoadingPage />;
+  const basicInfo = characterData.basic_info;
 
   return (
     <div className="basic-info-container">

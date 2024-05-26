@@ -9,9 +9,7 @@ const config = {
   },
 };
 
-export const getCharacterData = async <T extends keyof CharacterSheet>(
-  dataType: T
-): Promise<CharacterSheet[T] | undefined> => {
+export const getUserChars = async (): Promise<string[] | null> => {
   try {
     const characterIds = await axios.get(
       BACKEND_URL + "/char/usr-chars",
@@ -20,10 +18,24 @@ export const getCharacterData = async <T extends keyof CharacterSheet>(
 
     if (characterIds.status !== 200) {
       errorHandler(characterIds);
-      return;
+      return null;
     }
 
-    const charUid: string = characterIds.data[0];
+    return characterIds.data;
+  } catch (e) {
+    errorHandler(e);
+    return null;
+  }
+};
+
+export const getCharacterData = async <T extends keyof CharacterSheet>(
+  dataType: T
+): Promise<CharacterSheet[T] | undefined> => {
+  try {
+    const characterIds = await getUserChars();
+    if (!characterIds) return;
+
+    const charUid: string = characterIds[0];
 
     const characterData = await axios.get<CharacterSheet[]>(
       `${BACKEND_URL}/char/${charUid}/${dataType}/data/`,
@@ -36,6 +48,29 @@ export const getCharacterData = async <T extends keyof CharacterSheet>(
     }
 
     return characterData.data as unknown as CharacterSheet[T];
+  } catch (e) {
+    errorHandler(e);
+  }
+};
+
+export const getAllCharacterData = async () => {
+  try {
+    const characterIds = await getUserChars();
+    if (!characterIds) return;
+
+    const charUid: string = characterIds[0];
+
+    const characterData = await axios.get<CharacterSheet[]>(
+      `${BACKEND_URL}/char/${charUid}/all/data/`,
+      config
+    );
+
+    if (characterData.status !== 200) {
+      errorHandler(characterData);
+      return;
+    }
+
+    return characterData.data as unknown as CharacterSheet;
   } catch (e) {
     errorHandler(e);
   }

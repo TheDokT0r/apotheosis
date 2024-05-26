@@ -1,18 +1,18 @@
 import { Divider, TextField } from "@mui/material";
-import { useEffect, useState } from "react";
 import LoadingPage from "../LoadingPage/LoadingPage";
-import { getCharacterData, updateCharacterData } from "@/helper/character";
+import { useCharacter } from "@/stores/characterStore";
 
 export default function Status() {
-  const [status, setStatus] = useState<CharacterSheet["status"]>({});
-  const [loading, setLoading] = useState(true);
+  const { characterData, setSpecificCharacterData } = useCharacter();
 
   const changeStatusValues = (
     key: string,
     value: string,
     type: "total" | "current"
   ) => {
-    const statusCopy = { ...status };
+    if (!characterData) return;
+
+    const statusCopy = characterData.status;
 
     if (Number.isNaN(value) || value === "") {
       statusCopy[key][type] = "";
@@ -20,19 +20,12 @@ export default function Status() {
       statusCopy[key][type] = Number(value);
     }
 
-    setStatus(statusCopy);
-    updateCharacterData(statusCopy, "status");
+    setSpecificCharacterData("status", statusCopy);
   };
 
-  useEffect(() => {
-    setLoading(true);
-    getCharacterData("status").then((response) => {
-      if (response) setStatus(response);
-      setLoading(false);
-    });
-  }, []);
+  if (!characterData) return <LoadingPage />;
 
-  if (loading) return <LoadingPage />;
+  const status = characterData.status;
 
   return (
     <div>
