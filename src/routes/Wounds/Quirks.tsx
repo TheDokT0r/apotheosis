@@ -17,44 +17,34 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
+import { useCharacter } from "@/stores/characterStore";
 
 export default function Quirks() {
-  const [quirks, setQuirks] = useState<CharacterSheet["quirks"]>([]);
+  const { characterData, setSpecificCharacterData } = useCharacter();
   const [newQuirk, setNewQuirk] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    getCharacterData("quirks")
-      .then((response) => {
-        setLoading(true);
-        if (!response) return;
-
-        setQuirks(response);
-      })
-      .finally(() => setLoading(false));
-  }, []);
+  if (!characterData) return <LoadingPage />;
+  const { quirks } = characterData;
 
   const changeValue = (
     id: string,
     key: keyof CharacterSheet["quirks"][0],
     value: string
   ) => {
-    const quirksCopy = [...quirks];
-    const index = quirksCopy.findIndex((quirk) => quirk.id === id);
-    quirksCopy[index][key] = value;
-    setQuirks(quirksCopy);
+    const { quirks } = characterData;
+    const index = quirks.findIndex((quirk) => quirk.id === id);
+    quirks[index][key] = value;
+    setSpecificCharacterData("quirks", quirks);
 
     updateCharacterData(quirksCopy, "quirks");
   };
 
-  if (loading) return <LoadingPage />;
-
   const addQuirk = () => {
     const quirksCopy = [...quirks];
     quirksCopy.push({ name: newQuirk, description: "", id: uuid() });
-    setQuirks(quirksCopy);
+    setSpecificCharacterData("quirks", quirksCopy);
 
     updateCharacterData(quirksCopy, "quirks");
     setNewQuirk("");
@@ -65,7 +55,7 @@ export default function Quirks() {
     const index = quirksCopy.findIndex((quirk) => quirk.id === id);
 
     quirksCopy.splice(index, 1);
-    setQuirks(quirksCopy);
+    setSpecificCharacterData("quirks", quirksCopy);
 
     updateCharacterData(quirksCopy, "quirks");
     toast.success("Item deleted!");

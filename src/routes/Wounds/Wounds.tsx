@@ -2,46 +2,21 @@ import Human from "@/assets/images/Human.png";
 import "./Wounds.scss";
 import { Button, Card, TextField } from "@mui/material";
 import HeartBrokenIcon from "@mui/icons-material/HeartBroken";
-import SaveIcon from "@mui/icons-material/Save";
 import DeleteIcon from "@mui/icons-material/Delete";
 import XSymbol from "./XSymbol";
-import { useState, MouseEvent, useRef, useEffect } from "react";
+import { useState, MouseEvent, useRef } from "react";
 import { toast } from "react-toastify";
 import { v4 as uuid } from "uuid";
 import LoadingPage from "@/components/LoadingPage/LoadingPage";
-import { getCharacterData, updateCharacterData } from "@/helper/character";
-import errorHandler from "@/helper/errorHandler";
 import Quirks from "./Quirks";
+import { useCharacter } from "@/stores/characterStore";
 
 export default function Wounds() {
   const [isAddingNewWound, setIsAddingNewWound] = useState(false);
   const [pressedX, setPressedX] = useState<string | null>(null);
-  const [wounds, setWounds] = useState<CharacterSheet["wounds"]>([]);
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
+  const { characterData, setSpecificCharacterData } = useCharacter();
 
   const bodyRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setLoading(true);
-    getCharacterData("wounds").then((response) => {
-      if (response) setWounds(response);
-      setLoading(false);
-    });
-  }, []);
-
-  const onSaveClick = () => {
-    setSaving(true);
-
-    try {
-      updateCharacterData(wounds, "wounds");
-      toast.success("Data saved!");
-    } catch (e) {
-      errorHandler(e);
-    }
-
-    setSaving(false);
-  };
 
   const onBodyClick = (
     event: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
@@ -51,41 +26,50 @@ export default function Wounds() {
     const bounds = bodyRef.current.getBoundingClientRect();
     const x = ((event.clientX - bounds.left) / bounds.width) * 100;
     const y = ((event.clientY - bounds.top) / bounds.height) * 100;
+    if (!characterData) return;
 
-    const woundsCopy = [...wounds];
+    const woundsCopy = characterData.wounds;
     woundsCopy.push({ x, y, description: "", name: "", id: uuid() });
-    setWounds(woundsCopy);
+    setSpecificCharacterData("wounds", woundsCopy);
     setIsAddingNewWound(false);
   };
 
   const onWoundDescriptionChange = (id: string, newDescription: string) => {
+    if (!characterData) return;
+    const { wounds } = characterData;
+
     const index = wounds.findIndex((wound) => wound.id === id);
 
     const woundsCopy = [...wounds];
     woundsCopy[index].description = newDescription;
-    setWounds(woundsCopy);
+    setSpecificCharacterData("wounds", woundsCopy);
   };
 
   const onNameChange = (id: string, newName: string) => {
+    if (!characterData) return;
+    const { wounds } = characterData;
+
     const index = wounds.findIndex((wound) => wound.id === id);
 
     const woundsCopy = [...wounds];
     woundsCopy[index].name = newName;
-    setWounds(woundsCopy);
+    setSpecificCharacterData("wounds", woundsCopy);
   };
 
   const deleteWound = (id: string) => {
+    if (!characterData) return;
+    const { wounds } = characterData;
+
     const index = wounds.findIndex((wound) => wound.id === id);
 
     const woundsCopy = [...wounds];
     woundsCopy.splice(index, 1);
-    setWounds(woundsCopy);
+    setSpecificCharacterData("wounds", woundsCopy);
     setPressedX(null);
-
-    updateCharacterData(woundsCopy, "wounds");
   };
 
-  if (loading) return <LoadingPage />;
+  if (!characterData) return <LoadingPage />;
+  const { wounds } = characterData;
 
   return (
     <div className="wounds-page">
@@ -122,16 +106,6 @@ export default function Wounds() {
         {/* {isAddingNewWound && (
           <span>Press where would you like to add the wound</span>
         )} */}
-
-        <Button
-          disabled={saving}
-          onClick={onSaveClick}
-          startIcon={<SaveIcon />}
-          variant="contained"
-          color="success"
-        >
-          Save
-        </Button>
 
         {pressedX !== null && (
           <div className="wound-details">
