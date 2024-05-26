@@ -16,19 +16,15 @@ import {
 import { useState } from "react";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDowIcon from "@mui/icons-material/KeyboardArrowDown";
-import { updateCharacterData } from "@/helper/character";
+import { useCharacter } from "@/stores/characterStore";
 
 interface SkillTableProps {
   tableKey: string;
   skills: CharacterSheet["skills"];
-  setSkills: (newValue: CharacterSheet["skills"]) => void;
 }
 
-export default function SkillTable({
-  tableKey,
-  skills,
-  setSkills,
-}: SkillTableProps) {
+export default function SkillTable({ tableKey, skills }: SkillTableProps) {
+  const { setSpecificCharacterData } = useCharacter();
   const [isOpen, setIsOpen] = useState(false);
   const onSkillChange = async (
     table: string,
@@ -37,9 +33,7 @@ export default function SkillTable({
   ) => {
     const skillsCopy = { ...skills };
     skillsCopy[table][skillKey].skill_level = newState;
-    setSkills(skillsCopy);
-
-    updateCharacterData(skillsCopy, "skills");
+    setSpecificCharacterData("skills", skillsCopy);
   };
 
   const onProChange = async (
@@ -49,9 +43,7 @@ export default function SkillTable({
   ) => {
     const skillsCopy = { ...skills };
     skillsCopy[table][skillKey].pro = newState;
-    setSkills(skillsCopy);
-
-    updateCharacterData(skillsCopy, "skills");
+    setSpecificCharacterData("skills", skillsCopy);
   };
 
   return (

@@ -1,23 +1,14 @@
-import { useState, useEffect } from "react";
 import "./Skills.scss";
 import LoadingPage from "@/components/LoadingPage/LoadingPage";
 import { Card, Divider } from "@mui/material";
 import SkillTable from "./SkillTable";
-import { getCharacterData } from "@/helper/character";
+import { useCharacter } from "@/stores/characterStore";
 
 export default function Skills() {
-  const [skills, setSkills] = useState<CharacterSheet["skills"]>({});
-  const [loading, setLoading] = useState(true);
+  const { characterData } = useCharacter();
 
-  useEffect(() => {
-    setLoading(true);
-    getCharacterData("skills").then((response) => {
-      setLoading(false);
-      if (response) setSkills(response);
-    });
-  }, []);
-
-  if (loading) return <LoadingPage />;
+  if (!characterData) return <LoadingPage />;
+  const { skills } = characterData;
 
   return (
     <Card variant="outlined" sx={{ userSelect: "none" }}>
@@ -29,7 +20,6 @@ export default function Skills() {
               key={tableKey}
               tableKey={tableKey}
               skills={skills}
-              setSkills={setSkills}
             />
             <Divider />
           </>
