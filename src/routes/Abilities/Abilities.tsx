@@ -16,16 +16,14 @@ import {
 import Row from "./Row";
 import AddIcon from "@mui/icons-material/Add";
 import { toast } from "react-toastify";
-import { getCharacterData, updateCharacterData } from "@/helper/character";
+import {  updateCharacterData } from "@/helper/character";
 import axios from "axios";
 import { BACKEND_URL } from "@/helper/consts";
 import errorHandler from "@/helper/errorHandler";
 import LoadingPage from "@/components/LoadingPage/LoadingPage";
+import { useCharacter } from "@/stores/characterStore";
 
 export default function Abilities() {
-  const [userAbilities, setUserAbilities] = useState<
-    CharacterSheet["abilities"]
-  >([]);
   const [newAbility, setNewAbility] = useState("");
   const [allAbilities, setAllAbilities] = useState<AbilityData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -39,16 +37,17 @@ export default function Abilities() {
           errorHandler(response);
           return;
         }
+
         setAllAbilities(response.data as AbilityData[]);
       })
       .catch((e) => errorHandler(e))
-      .finally(() => {
-        getCharacterData("abilities").then((response) => {
-          if (response) setUserAbilities(response);
-          setLoading(false);
-        });
-      });
+      .finally(() => setLoading(false));
   }, []);
+
+  const { characterData, setSpecificCharacterData } = useCharacter();
+
+  if (!characterData || loading) return <LoadingPage />;
+  const { abilities } = characterData;
 
   const addAbility = () => {
     const newAbilityData = allAbilities.find(
@@ -57,22 +56,18 @@ export default function Abilities() {
 
     if (!newAbilityData) return;
 
-    if (userAbilities.includes(newAbilityData.name)) {
+    if (abilities.includes(newAbilityData.name)) {
       toast.error("Can't choose the same ability twice");
       return;
     }
 
-    const abilitiesCopy = [...userAbilities];
+    const abilitiesCopy = [...abilities];
     abilitiesCopy.push(newAbilityData.name);
-    setUserAbilities(abilitiesCopy);
+    setSpecificCharacterData("abilities", abilitiesCopy);
     setNewAbility("");
 
     updateCharacterData(abilitiesCopy, "abilities");
   };
-
-  if (loading) {
-    return <LoadingPage />;
-  }
 
   return (
     <div style={{ margin: "1rem" }}>
@@ -141,11 +136,10 @@ export default function Abilities() {
             </TableCell>
           </TableHead>
           <TableBody>
-            {userAbilities.sort().map((ability) => (
+            {abilities.sort().map((ability) => (
               <Row
                 ability={allAbilities.find((ab) => ab.name === ability)}
-                abilities={userAbilities}
-                setAbilities={setUserAbilities}
+                abilities={abilities}
               />
             ))}
           </TableBody>

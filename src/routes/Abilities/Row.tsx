@@ -12,22 +12,23 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDowIcon from "@mui/icons-material/KeyboardArrowDown";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { updateCharacterData } from "@/helper/character";
+import { useCharacter } from "@/stores/characterStore";
 
 interface RowProps {
   ability?: AbilityData;
   abilities: CharacterSheet["abilities"];
-  setAbilities: (newValue: CharacterSheet["abilities"]) => void;
 }
 
-export default function Row({ ability, abilities, setAbilities }: RowProps) {
+export default function Row({ ability, abilities }: RowProps) {
   const [open, setOpen] = useState(false);
+  const { setSpecificCharacterData } = useCharacter();
 
   const deleteAbility = () => {
     if (!ability) return;
     const abilitiesCopy = [...abilities];
     const index = abilitiesCopy.findIndex((ab) => ab === ability.name);
     abilitiesCopy.splice(index, 1);
-    setAbilities(abilitiesCopy);
+    setSpecificCharacterData("abilities", abilitiesCopy);
 
     updateCharacterData(abilitiesCopy, "abilities");
   };

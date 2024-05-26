@@ -1,5 +1,5 @@
 import LoadingPage from "@/components/LoadingPage/LoadingPage";
-import { getCharacterData, updateCharacterData } from "@/helper/character";
+import { updateCharacterData } from "@/helper/character";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { v4 as uuid } from "uuid";
@@ -38,15 +38,14 @@ export default function Quirks() {
     quirks[index][key] = value;
     setSpecificCharacterData("quirks", quirks);
 
-    updateCharacterData(quirksCopy, "quirks");
+    updateCharacterData(quirks, "quirks");
   };
 
   const addQuirk = () => {
-    const quirksCopy = [...quirks];
-    quirksCopy.push({ name: newQuirk, description: "", id: uuid() });
-    setSpecificCharacterData("quirks", quirksCopy);
+    quirks.push({ name: newQuirk, description: "", id: uuid() });
+    setSpecificCharacterData("quirks", quirks);
 
-    updateCharacterData(quirksCopy, "quirks");
+    updateCharacterData(quirks, "quirks");
     setNewQuirk("");
   };
 

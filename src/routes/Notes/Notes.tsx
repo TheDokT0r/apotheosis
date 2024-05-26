@@ -1,27 +1,19 @@
-import { useEffect, useState } from "react";
 import "./Notes.scss";
 import { Button, Divider, TextField } from "@mui/material";
 import LoadingPage from "@/components/LoadingPage/LoadingPage";
-import { getCharacterData, updateCharacterData } from "@/helper/character";
+import { useCharacter } from "@/stores/characterStore";
 
 export default function Notes() {
-  const [notes, setNotes] = useState<CharacterSheet["notes"]>("");
+  const { characterData, setSpecificCharacterData } = useCharacter();
 
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setLoading(true);
-    getCharacterData("notes").then((response) => {
-      if (response) setNotes(response);
-      setLoading(false);
-    });
-  }, []);
+  if (!characterData) return <LoadingPage />;
+  const { notes } = characterData;
 
   const saveNotes = async () => {
-    updateCharacterData(notes, "notes");
+    setSpecificCharacterData("notes", notes);
   };
 
-  if (loading) return <LoadingPage />;
+  if (!characterData) return <LoadingPage />;
 
   return (
     <div className="notes-page">
@@ -36,7 +28,7 @@ export default function Notes() {
         placeholder="Your Notes Here"
         value={notes}
         onChange={(e) => {
-          setNotes(e.target.value);
+          setSpecificCharacterData("notes", e.target.value);
         }}
         multiline
       />
