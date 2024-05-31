@@ -2,6 +2,8 @@ import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 
 export default function errorHandler(error: unknown) {
+  console.log(error);
+
   if (typeof error === "string") {
     toast.error(error.toUpperCase());
   } else if (error instanceof AxiosError) {
