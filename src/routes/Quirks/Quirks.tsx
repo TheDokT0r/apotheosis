@@ -3,7 +3,7 @@ import { updateCharacterData } from "@/helper/character";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { v4 as uuid } from "uuid";
-import "./Wounds.scss";
+import "./Quirks.scss";
 
 import {
   IconButton,

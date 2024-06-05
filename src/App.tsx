@@ -11,6 +11,7 @@ import TopMenu from "./components/TopMenu/TopMenu";
 import { useCharacter } from "./stores/characterStore";
 import axios from "axios";
 import { getAllCharacterData } from "./helper/character";
+import Quirks from "./routes/Quirks/Quirks";
 
 const Home = lazy(() => import("@/routes/Home/Home"));
 const Login = lazy(() => import("@/routes/Login/Login"));
@@ -89,6 +90,7 @@ export default function App() {
               <Route path="/signup" element={<Signup />} />
               <Route path="/skills" element={<Skills />} />
               <Route path="/wounds" element={<Wounds />} />
+              <Route path="/quirks" element={<Quirks />} />
               <Route path="/abilities" element={<Abilities />} />
               <Route path="/notes" element={<Notes />} />
               <Route path="/game" element={<Game />} />

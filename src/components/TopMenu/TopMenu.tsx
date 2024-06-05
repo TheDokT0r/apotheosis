@@ -12,6 +12,7 @@ import BoltIcon from "@mui/icons-material/Bolt";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import GamepadIcon from "@mui/icons-material/Gamepad";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
+import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { AppBar, Divider, Toolbar, Box, Typography } from "@mui/material";
@@ -79,6 +80,11 @@ export default function TopMenu() {
             Wounds
           </MenuItem>
 
+          <MenuItem onClick={() => goTo('/quirks')}>
+            <SentimentDissatisfiedIcon />
+            Quirks
+          </MenuItem>
+
           <MenuItem onClick={() => goTo("/abilities")}>
             <BoltIcon />
             Abilities
@@ -117,6 +123,8 @@ export default function TopMenu() {
           >
             <MenuBookIcon />
           </IconButton>
+
+          
 
           <IconButton
             size="large"

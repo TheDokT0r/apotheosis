@@ -8,7 +8,6 @@ import { useState, MouseEvent, useRef } from "react";
 import { toast } from "react-toastify";
 import { v4 as uuid } from "uuid";
 import LoadingPage from "@/components/LoadingPage/LoadingPage";
-import Quirks from "./Quirks";
 import { useCharacter } from "@/stores/characterStore";
 
 export default function Wounds() {
@@ -88,21 +87,24 @@ export default function Wounds() {
         <img src={Human} alt="human_img" />
       </div>
 
-      <Card>
+      <Card sx={{width: '50%', display: 'grid', placeItems: 'center'}}>
+        {!pressedX &&
         <Button
-          onClick={() => {
-            if (pressedX !== null) {
-              toast.warn("Can't create a new wound while selecting another");
-              return;
-            }
-            setIsAddingNewWound(!isAddingNewWound);
-          }}
-          variant="contained"
-          startIcon={<HeartBrokenIcon />}
-          color={isAddingNewWound ? "primary" : "error"}
+        onClick={() => {
+          if (pressedX !== null) {
+            toast.warn("Can't create a new wound while selecting another");
+            return;
+          }
+          setIsAddingNewWound(!isAddingNewWound);
+        }}
+        variant="contained"
+        startIcon={<HeartBrokenIcon />}
+        color={isAddingNewWound ? "primary" : "error"}
         >
           {isAddingNewWound ? "Cancel" : "Add Wound"}
         </Button>
+      }
+
         {/* {isAddingNewWound && (
           <span>Press where would you like to add the wound</span>
         )} */}
@@ -114,7 +116,6 @@ export default function Wounds() {
                 wounds[wounds.findIndex((wound) => wound.id === pressedX)].name
               }
               onChange={(e) => onNameChange(pressedX, e.target.value)}
-              sx={{ marginTop: "1rem" }}
               label="Name"
             />
 
@@ -126,14 +127,12 @@ export default function Wounds() {
               onChange={(e) =>
                 onWoundDescriptionChange(pressedX, e.target.value)
               }
-              sx={{ marginTop: "1rem" }}
               label="Description"
               multiline
             />
 
             <Button
               onClick={() => deleteWound(pressedX)}
-              sx={{ position: "absolute", bottom: 0, width: "100%" }}
               variant="contained"
               color="error"
               startIcon={<DeleteIcon />}
@@ -143,8 +142,6 @@ export default function Wounds() {
           </div>
         )}
       </Card>
-
-      <Quirks />
     </div>
   );
 }
