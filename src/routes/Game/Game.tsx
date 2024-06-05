@@ -35,6 +35,30 @@ export default function Game() {
     return "error";
   };
 
+  const getBestMove = (board: (string | null)[][]): { x: number; y: number } => {
+    // Simple strategy: prioritize winning, then blocking opponent from winning, then random
+    for (let i = 0; i < board.length; i++) {
+      for (let j = 0; j < board[0].length; j++) {
+        if (board[i][j] === null) {
+          // Check if AI wins by placing its piece here
+          const boardCopy = JSON.parse(JSON.stringify(board));
+          boardCopy[i][j] = "O";
+          if (checkVictory(boardCopy) === "won") {
+            return { x: i, y: j };
+          }
+          // Check if opponent wins by placing its piece here
+          boardCopy[i][j] = "X";
+          if (checkVictory(boardCopy) === "won") {
+            return { x: i, y: j };
+          }
+        }
+      }
+    }
+
+    // No immediate win or block, choose a random move
+    return getRandomUnusedPosition(board)!;
+  };
+
   const getRandomUnusedPosition = (
     arr: (null | string)[][]
   ): { x: number; y: number } | null => {
@@ -64,16 +88,17 @@ export default function Game() {
     const boardCopy = [...board];
     boardCopy[x][y] = "X";
 
-    // Enemy's turn
-    const positions = getRandomUnusedPosition(boardCopy);
+    // Check for game end after player's move
+    setGameState(checkVictory(boardCopy));
 
-    if (positions) {
-      boardCopy[positions.x][positions.y] = "O";
+    // AI's turn
+    if (gameState === "playing") {
+      const aiMove = getBestMove(boardCopy);
+      boardCopy[aiMove.x][aiMove.y] = "O";
+      setGameState(checkVictory(boardCopy));
     }
 
     setBoard(boardCopy);
-
-    setGameState(checkVictory(boardCopy));
   };
 
   const getEndingTextAndColor = (): {
