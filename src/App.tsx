@@ -8,7 +8,9 @@ import socketStore from "./stores/socketStore";
 import { BACKEND_URL } from "./helper/consts";
 import { io } from "socket.io-client";
 import TopMenu from "./components/TopMenu/TopMenu";
-import DataFetcher from "./components/DataFetcher/DataFetcher";
+import { useCharacter } from "./stores/characterStore";
+import axios from "axios";
+import { getAllCharacterData } from "./helper/character";
 
 const Home = lazy(() => import("@/routes/Home/Home"));
 const Login = lazy(() => import("@/routes/Login/Login"));
@@ -33,6 +35,27 @@ export default function App() {
   const socketIO = socketStore((state) => state.socket);
   const setSocket = socketStore((state) => state.setSocket);
   const token = localStorage.getItem("token");
+  const { setCharacterData } = useCharacter();
+
+  useEffect(() => {
+    const fetch = async () => {
+      const token = localStorage.getItem("token");
+      const response = await axios
+        .get(`${BACKEND_URL}/usr/check-login`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+
+      if (!response || response.status !== 200) {
+        return;
+      }
+
+      const newCharData = await getAllCharacterData();
+      if (!newCharData) return;
+
+      setCharacterData(newCharData);
+    };
+    fetch();
+  }, [setCharacterData]);
 
   useEffect(() => {
     const socket = io(BACKEND_URL, { query: { token } });
@@ -58,7 +81,6 @@ export default function App() {
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
         <BrowserRouter>
-          <DataFetcher />
           <TopMenu />
           <Suspense fallback={<LoadingPage />}>
             <Routes>

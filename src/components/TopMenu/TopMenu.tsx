@@ -95,7 +95,7 @@ export default function TopMenu() {
             <LogoutIcon /> Logout
           </MenuItem>
           <MenuItem>
-            <span>Build 2.0 - Caesar</span>
+            <span>VErsion 2.1 - Caesar</span>
           </MenuItem>
         </Menu>
 
