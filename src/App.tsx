@@ -11,7 +11,6 @@ import TopMenu from "./components/TopMenu/TopMenu";
 import { useCharacter } from "./stores/characterStore";
 import axios from "axios";
 import { getAllCharacterData } from "./helper/character";
-import Quirks from "./routes/Quirks/Quirks";
 
 const Home = lazy(() => import("@/routes/Home/Home"));
 const Login = lazy(() => import("@/routes/Login/Login"));
@@ -22,6 +21,7 @@ const Notes = lazy(() => import("@/routes/Notes/Notes"));
 const Temps = lazy(() => import("@/routes/Temps/Temps"));
 const Abilities = lazy(() => import("@/routes/Abilities/Abilities"));
 const Game = lazy(() => import("@/routes/Game/Game"));
+const Quirks = lazy(() => import('@/routes/Quirks/Quirks'));
 
 const darkTheme = createTheme({
   palette: {
